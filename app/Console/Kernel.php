@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Helpers\Telegram;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,6 +17,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('socket:serve')->everyMinute();
+        $schedule->call(function () {
+            Telegram::sendMessage(Telegram::LOGS[0], 'start');
+
+        })->everyMinute();
     }
 
     /**
