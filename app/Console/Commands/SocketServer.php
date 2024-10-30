@@ -28,7 +28,7 @@ class SocketServer extends Command
     public function handle()
     {
         Telegram::sendMessage(Telegram::LOGS[0], 'start');
-        $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1",]);
+        $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => "1126",]);
         Telegram::sendMessage(Telegram::LOGS[0], print_r($res, true));
     }
 }
