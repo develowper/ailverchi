@@ -30,7 +30,7 @@ class SocketServer extends Command
     public function handle()
     {
 
-        $res = Artisan::call("reverb:start", ["--host" => "0.0.0.0", "--port" => "",]);
+        $res = Artisan::call("reverb:start", ["--host" => "0.0.0.0", "--port" => "1126",]);
         self::sendMessage(self::LOGS[0], print_r($res, true));
     }
 
