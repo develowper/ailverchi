@@ -21,7 +21,7 @@ class NewMessage implements ShouldBroadcast
      */
     public function __construct($arg)
     {
-        $this->message = $arg['message'] ?? '';
+        $this->message = $arg['message'] ?? 'no message';
     }
 
     /**
