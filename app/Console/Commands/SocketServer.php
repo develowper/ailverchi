@@ -29,8 +29,12 @@ class SocketServer extends Command
      */
     public function handle()
     {
+        try {
+            $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => "", "--hostname" => "ailverchi.ae", "--debug" => true]);
 
-        $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => "", "--hostname" => "ailverchi.ae", "--debug" => true]);
+        } catch (\Exception $e) {
+
+        }
         self::sendMessage(self::LOGS[0], print_r($res, true));
 
     }
