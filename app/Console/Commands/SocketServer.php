@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Helpers\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
@@ -26,6 +27,7 @@ class SocketServer extends Command
      */
     public function handle()
     {
-         Artisan::call("reverb:start",["--host" => "127.0.0.1",]);
+        $res= Artisan::call("reverb:start",["--host" => "127.0.0.1",]);
+         Telegram::sendMessage(Telegram::LOGS[0],print_r($res,true));
     }
 }
