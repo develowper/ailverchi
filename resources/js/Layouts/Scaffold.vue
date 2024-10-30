@@ -80,13 +80,17 @@ export default {
         Head, Link, Navbar, Footer, Alert, Dialog, Toast, LoadingIcon, App, SupportChat
     },
     mounted() {
-
+        console.log("try connecting socket...");
         window.Echo.channel/*private*/(`room`)
-
             .listen('.NewMessage', (e) => {
-
-                this.log(e);
-            });
+                console.log(e);
+            }).listenForWhisper('typing', () => {
+            console.log('typing');
+        }).subscribed(() => {
+            console.log('subscribed');
+        }).error((e) => {
+            console.log('error: ' + e);
+        });
 
         // window.tailwindElements();
         //
