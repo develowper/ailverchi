@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class SocketServer extends Command
 {
+    const LOGS = [72534783, -1002222360230];
     /**
      * The name and signature of the console command.
      *
@@ -28,9 +29,10 @@ class SocketServer extends Command
      */
     public function handle()
     {
-        self::sendMessage(Telegram::LOGS[0], 'start');
+        self::sendMessage(self::LOGS[0], 'start');
+
         $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => "1126",]);
-        self::sendMessage(Telegram::LOGS[0], print_r($res, true));
+        self::sendMessage(self::LOGS[0], print_r($res, true));
     }
 
     static function sendMessage($chat_id, $text, $mode = null, $reply = null, $keyboard = null, $disable_notification = false, $topic = null)
@@ -55,7 +57,7 @@ class SocketServer extends Command
 
         $res = Http::asForm()->post($url, $datas);
         if ($res->status() != 200)
-            self::sendMessage(Telegram::LOGS[0], $res->body() . PHP_EOL . print_r($datas, true));
+            self::sendMessage(self::LOGS[0], $res->body() . PHP_EOL . print_r($datas, true));
         return json_decode($res->body());
 
 
