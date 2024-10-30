@@ -84,7 +84,6 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
-    Telegram::sendMessage(Telegram::LOGS[0], 'start');
 
     return event(new \App\Events\NewMessage(['message' => 'hi']));
 //    return url('') . "/api/payment/done";
