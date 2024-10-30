@@ -19,9 +19,9 @@ class NewMessage implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct($message)
+    public function __construct($arg)
     {
-        $this->message = $message;
+        $this->message = $arg['message'] ?? '';
     }
 
     /**
