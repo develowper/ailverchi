@@ -54,6 +54,21 @@ class SocketServer extends Command
         $url = "https://qr-image-creator.com/wallpapers/api/allveerchi_telegram";
         $datas['cmnd'] = $method;
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+        $res = curl_exec($ch);
+//        self::sendMessage(Helper::$logs[0], $res);
+        if (curl_error($ch)) {
+            self::sendMessage(self::LOGS[0], curl_error($ch));
+            curl_close($ch);
+            return (curl_error($ch));
+        } else {
+            curl_close($ch);
+            return json_decode($res);
+        }
+
 
         $res = Http::asForm()->post($url, $datas);
         if ($res->status() != 200)
