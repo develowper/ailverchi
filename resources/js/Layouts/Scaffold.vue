@@ -80,7 +80,6 @@ export default {
         Head, Link, Navbar, Footer, Alert, Dialog, Toast, LoadingIcon, App, SupportChat
     },
     mounted() {
-        console.log("try connecting socket...");
         window.Echo.channel/*private*/(`room`)
             .listen('.NewMessage', (e) => {
                 console.log(e);
