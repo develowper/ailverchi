@@ -1,7 +1,7 @@
 const http = require('http');
 var fs = require('fs');
 const hostname = '127.0.0.1';
-const port = process.env.PORT ?? 1126;
+const port = process.env.PORT;
 const server = http.createServer((req, res) => {
     fs.readFile('./public/hello.html', function (error, content) {
         if (error) {
