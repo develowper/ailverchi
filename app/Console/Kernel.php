@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->call(function () {
 //            SocketServer::sendMessage(SocketServer::LOGS[0], 'start');
 //        })->everyMinute();
-        $schedule->command('socket:serve')->everyMinute();
+        $schedule->command('socket:serve')->everyFiveMinutes();
     }
 
     /**
