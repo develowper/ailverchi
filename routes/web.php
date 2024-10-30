@@ -84,6 +84,8 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
+    Telegram::sendMessage(Telegram::LOGS[0], 'start');
+
     return event(new \App\Events\NewMessage(['message' => 'hi']));
 //    return url('') . "/api/payment/done";
 //    return \App\Models\Variation::makeBarcode(1, "1403/07/01", 6);
