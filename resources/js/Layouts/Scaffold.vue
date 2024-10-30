@@ -87,6 +87,7 @@ export default {
             console.log('typing');
         }).subscribed(() => {
             console.log('subscribed');
+            window.axios.get('test');
         }).error((e) => {
             console.log('error: ' + e);
         });
