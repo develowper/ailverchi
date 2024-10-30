@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('socket:serve')->everyMinute()->withoutOverlapping();
+        $schedule->command('socket:serve')->everyMinute();
     }
 
     /**
