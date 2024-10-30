@@ -16,10 +16,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            SocketServer::sendMessage(SocketServer::LOGS[0], 'start');
-        })->everyMinute();
-//        $schedule->command('socket:serve')->everyMinute();
+//        $schedule->call(function () {
+//            SocketServer::sendMessage(SocketServer::LOGS[0], 'start');
+//        })->everyMinute();
+        $schedule->command('socket:serve')->everyMinute();
     }
 
     /**
