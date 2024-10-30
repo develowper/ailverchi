@@ -16,11 +16,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('socket:serve')->everyMinute();
         $schedule->call(function () {
             Telegram::sendMessage(Telegram::LOGS[0], 'start');
 
         })->everyMinute();
+        $schedule->command('socket:serve')->everyMinute();
     }
 
     /**
