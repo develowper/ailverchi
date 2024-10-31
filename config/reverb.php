@@ -34,9 +34,10 @@ return [
             'hostname' => env('REVERB_HOST'),
             'options' => [
                 'tls' => [
-                    'local_cert' => env('SSL_CERTIFICATE'),
-                    'local_pk' => env('SSL_CERTIFICATE_KEY'),
+//                    'local_cert' => env('SSL_CERTIFICATE'),
+//                    'local_pk' => env('SSL_CERTIFICATE_KEY'),
                     'verify_peer' => env('APP_ENV') !== 'local',
+//                    'allow_self_signed' => env('APP_ENV') !== 'production',
                 ],
             ],
             'max_request_size' => env('REVERB_MAX_REQUEST_SIZE', 10_000),
