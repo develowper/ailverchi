@@ -21,7 +21,7 @@ class NewMessage implements ShouldBroadcast
      */
     public function __construct($arg)
     {
-        $this->message = $arg['message'] ?? 'no message';
+        $this->message = $arg ?? 'no message';
     }
 
     /**
@@ -32,7 +32,7 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new  Channel('room'),
+            new  Channel('chat'),
         ];
     }
 

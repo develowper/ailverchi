@@ -80,14 +80,18 @@ export default {
         Head, Link, Navbar, Footer, Alert, Dialog, Toast, LoadingIcon, App, SupportChat
     },
     mounted() {
-        window.Echo.channel/*private*/(`room`)
+        window.Echo.channel/*private*/(`chat`)
             .listen('.NewMessage', (e) => {
                 console.log(e);
-            }).listenForWhisper('typing', () => {
-            console.log('typing');
-        }).subscribed(() => {
+            })
+            .notification((notification) => {
+                console.log(notification.type);
+            })
+            .listenForWhisper('typing', () => {
+                console.log('typing');
+            }).subscribed(() => {
             console.log('subscribed');
-            window.axios.get('test');
+            // window.axios.get('test');
         }).error((e) => {
             console.log('error: ' + e);
         });
