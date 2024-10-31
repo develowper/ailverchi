@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Helpers\Telegram;
 use Illuminate\Console\Command;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 
