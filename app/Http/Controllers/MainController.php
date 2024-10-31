@@ -42,25 +42,24 @@ class MainController extends Controller
 //    Telegram::log(null, 'order_created', \App\Models\Order::with('items')->with('agency')->orderBy('id', 'DESC')->first());
         $domainCountry = explode('.', url()->current())[count(explode('.', url()->current())) - 1];
 
-        if (str_contains(url()->current(), '.ae') || str_contains(url()->current(), 'localhost'))
 
-            return Inertia::render('MainAE', [
-                'heroText' => \App\Models\Setting::getValue('hero_main_page'),
-                'slides' => \App\Models\Slider::where('is_active', true)->get(),
-                'articles' => \App\Models\Article::where('status', 'active')->orderBy('id', 'desc')->take(12)->get(),
-                'section1Header' => __('our_services'),
-                'sections' =>
-                    __('sections_ae')
-                ,
-                'section2Header' => __('our_benefits'),
-                'section2' => [
-                ],
-                'carouselImages' => [],
-                'counts' => [
-                    'users' => ['icon' => 'UsersIcon', 'count' => User::count()],
-                    'articles' => ['icon' => 'PencilIcon', 'count' => Article::count()],
-                ]
-            ]);
+        return Inertia::render('Main', [
+            'heroText' => \App\Models\Setting::getValue('hero_main_page'),
+            'slides' => \App\Models\Slider::where('is_active', true)->get(),
+            'articles' => \App\Models\Article::where('status', 'active')->orderBy('id', 'desc')->take(12)->get(),
+            'section1Header' => __('our_services'),
+            'sections' =>
+                __('sections_ae')
+            ,
+            'section2Header' => __('our_benefits'),
+            'section2' => [
+            ],
+            'carouselImages' => [],
+            'counts' => [
+                'users' => ['icon' => 'UsersIcon', 'count' => User::count()],
+                'articles' => ['icon' => 'PencilIcon', 'count' => Article::count()],
+            ]
+        ]);
         return Inertia::render('Main', [
             'heroText' => \App\Models\Setting::getValue('hero_main_page'),
             'slides' => \App\Models\Slider::where('is_active', true)->get(),
