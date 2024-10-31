@@ -23,3 +23,6 @@ Broadcast::channel('.support.channel'/*.{chatterId}'*/, function ($user, $chatte
 Broadcast::channel('support.{chatId}'/*.{chatterId}'*/, function () {
     return true;
 });
+Broadcast::channel('room'/*.{chatterId}'*/, function () {
+    return true;
+});
