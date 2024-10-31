@@ -30,8 +30,11 @@ class SocketServer extends Command
     public function handle()
     {
         try {
-            $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => "1126", "--hostname" => "ailverchi.ae",/* "--debug" => true*/]);
-            SocketServer::sendMessage(SocketServer::LOGS[0], print_r($res, true));
+            $port = 1126;
+            if (!$this->portIsUsed($port)) {
+                $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => $port, "--hostname" => "ailverchi.ae",/* "--debug" => true*/]);
+                SocketServer::sendMessage(SocketServer::LOGS[0], print_r($res, true));
+            }
 
         } catch (\Exception $e) {
             SocketServer::sendMessage(SocketServer::LOGS[0], $e->getTraceAsString());
@@ -80,6 +83,17 @@ class SocketServer extends Command
             self::sendMessage(self::LOGS[0], $res->body() . PHP_EOL . print_r($datas, true));
         return json_decode($res->body());
 
+
+    }
+
+    private function portIsUsed(int $port): bool
+    {
+        $serverConn = @stream_socket_client("tcp://127.0.0.1:$port", $errno, $errstr);
+        if ($errstr != '') {
+            return false;
+        }
+        fclose($serverConn);
+        return true;
 
     }
 
