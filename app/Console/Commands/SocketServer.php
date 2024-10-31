@@ -91,9 +91,9 @@ class SocketServer extends Command
     private function portIsUsed(int $port): bool
     {
         $serverConn = @stream_socket_client("tcp://127.0.0.1:$port", $errno, $errstr);
-        self::sendMessage(self::LOGS[0], print_r($errstr, true));
 
         if ($errstr != '') {
+            self::sendMessage(self::LOGS[0], print_r($errstr, true));
             return false;
         }
         fclose($serverConn);
