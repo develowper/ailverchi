@@ -36,7 +36,8 @@ return [
                 'tls' => [
 //                    'local_cert' => env('SSL_CERTIFICATE'),
 //                    'local_pk' => env('SSL_CERTIFICATE_KEY'),
-                    'verify_peer' => env('APP_ENV') !== 'local',
+//                    'verify_peer' => env('APP_ENV') !== 'local',
+                    'verify_peer' => true,
 //                    'allow_self_signed' => env('APP_ENV') !== 'production',
                 ],
             ],
