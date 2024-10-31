@@ -85,7 +85,7 @@ Route::get('/cache', function () {
 });
 Route::get('test', function () {
 
-    return event(new \App\Events\NewMessage('hi'));
+    return event(new \App\Events\NewMessage(['message' => 'hi']));
 //    return url('') . "/api/payment/done";
 //    return \App\Models\Variation::makeBarcode(1, "1403/07/01", 6);
 //    return \App\Models\Variation::validateBarcode('10140307010676') ? 'true' : 'false';

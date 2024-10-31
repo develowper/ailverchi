@@ -145,7 +145,8 @@ export default {
         getErrors(error) {
             if (error.response) {
                 if (error.response.status == 419)
-                    location.reload();
+                    // location.reload();
+                    null;
                 if (error.response.data && error.response.data.errors)
                     return Object.values(error.response.data.errors).join("<br/>")
                 if (error.response.data && error.response.data.message)

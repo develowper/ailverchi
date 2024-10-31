@@ -80,21 +80,6 @@ export default {
         Head, Link, Navbar, Footer, Alert, Dialog, Toast, LoadingIcon, App, SupportChat
     },
     mounted() {
-        window.Echo.channel/*private*/(`chat`)
-            .listen('.NewMessage', (e) => {
-                console.log(e);
-            })
-            .notification((notification) => {
-                console.log(notification.type);
-            })
-            .listenForWhisper('typing', () => {
-                console.log('typing');
-            }).subscribed(() => {
-            console.log('subscribed');
-            // window.axios.get('test');
-        }).error((e) => {
-            console.log('error: ' + e);
-        });
 
         // window.tailwindElements();
         //
@@ -122,7 +107,32 @@ export default {
         this.emitter.on('loading', (e) => {
             this.loading = e;
         });
+
+        this.initSocket();
+
     },
-    methods: {},
+    methods: {
+        initSocket() {
+            window.Echo.channel/*private*/(`room`)
+                .listen('NewMessage', (e) => {
+                    this.$refs.toast.show('success', e);
+                    console.log(e);
+                }).listenToAll((event, data) => {
+                console.log(event, data)
+            })
+                .notification((notification) => {
+                    console.log(notification.type);
+                })
+                .listenForWhisper('typing', () => {
+                    console.log('typing');
+                }).subscribed(() => {
+                console.log('subscribed');
+                // window.axios.get('test');
+            }).error((e) => {
+                console.log(e);
+            });
+        }
+
+    },
 }
 </script>

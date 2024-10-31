@@ -32,7 +32,7 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new  Channel('chat'),
+            new   Channel('room')
         ];
     }
 
@@ -44,6 +44,6 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastWith() //attributes in payload event
     {
-        return ['message' => $this->message,];
+        return ['message' => $this->message];
     }
 }
