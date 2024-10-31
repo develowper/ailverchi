@@ -43,7 +43,7 @@ class MainController extends Controller
         $domainCountry = explode('.', url()->current())[count(explode('.', url()->current())) - 1];
 
 
-        return Inertia::render('Main', [
+        return Inertia::render('MainAE', [
             'heroText' => \App\Models\Setting::getValue('hero_main_page'),
             'slides' => \App\Models\Slider::where('is_active', true)->get(),
             'articles' => \App\Models\Article::where('status', 'active')->orderBy('id', 'desc')->take(12)->get(),
