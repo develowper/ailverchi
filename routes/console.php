@@ -25,3 +25,4 @@ Schedule:: call(function () {
     SocketServer::sendMessage(SocketServer::LOGS[0], 'start');
 })->everyMinute();
 Schedule::command('socket:serve')->everyMinute();
+//        Schedule::exec('/usr/local/bin/php /home/allveerchi/ailverchi/artisan reverb:start --host="127.0.0.1" --port=1126 --hostname="ailverchi.ae"')->everyMinute();
