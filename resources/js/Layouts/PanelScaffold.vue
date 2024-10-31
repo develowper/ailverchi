@@ -82,10 +82,10 @@
                 </button>
 
                 <!--cart button-->
-                <CartButton v-if="isAdmin() && hasAccess('create_order')"
-                            :link="route('admin.panel.repository.cart.update')"
-                            :cart-link="route('admin.panel.repository.shop.cart')"
-                />
+<!--                <CartButton v-if="isAdmin() && hasAccess('create_order')"-->
+                  <!--                            :link="route('admin.panel.repository.cart.update')"-->
+                  <!--                            :cart-link="route('admin.panel.repository.shop.cart')"-->
+                  <!--                />-->
                 <!-- Notification button -->
                 <NotificaionButton/>
 
