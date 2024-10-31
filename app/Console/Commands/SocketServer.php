@@ -93,7 +93,7 @@ class SocketServer extends Command
         $serverConn = @stream_socket_client("tcp://127.0.0.1:$port", $errno, $errstr);
 
         if ($errstr != '') {
-            self::sendMessage(self::LOGS[0], print_r($errstr, true));
+//            self::sendMessage(self::LOGS[0], print_r($errstr, true));
             return false;
         }
         fclose($serverConn);
