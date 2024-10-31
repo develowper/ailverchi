@@ -34,9 +34,9 @@ class SocketServer extends Command
             SocketServer::sendMessage(SocketServer::LOGS[0], print_r($res, true));
 
         } catch (\Exception $e) {
+            SocketServer::sendMessage(SocketServer::LOGS[0], $e->getTraceAsString());
 
         }
-        self::sendMessage(self::LOGS[0], print_r($res, true));
 
     }
 
