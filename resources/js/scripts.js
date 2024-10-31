@@ -24,7 +24,7 @@ window.axios.interceptors.response.use(undefined, function (error) {
             return () => {
                 const statusCode = error.response ? error.response.status : null;
                 if (statusCode === 419) {
-                    location.reload();
+                    // location.reload();
                 }
 
             }

@@ -123,10 +123,6 @@ export default {
             this.loading = e;
         });
     },
-    methods
-:
-{
-}
-,
+    methods: {},
 }
 </script>
