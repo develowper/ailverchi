@@ -1,9 +1,19 @@
-var http = require('http');
-var server = http.createServer(function(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    var message = 'It works!\n',
-        version = 'NodeJS ' + process.versions.node + '\n',
-        response = [message, version].join('\n');
-    res.end(response);
+const express = require('express');
+const {createServer} = require('node:http');
+const {join} = require('node:path');
+const {Server} = require('socket.io');
+
+const app = express();
+const server = createServer(app);
+const io = new Server(server);
+
+app.get('/', (req, res) => {
+    res.sendFile(join(__dirname, 'index.html'));
+
 });
-server.listen();
+io.on('connection', (socket) => {
+    console.log('a user connected');
+});
+server.listen(3003, () => {
+    console.log('server running at http://localhost:3003');
+});
