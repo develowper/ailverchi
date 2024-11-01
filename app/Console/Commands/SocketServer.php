@@ -23,7 +23,7 @@ class SocketServer extends Command
      *
      * @var string
      */
-    protected $description = 'php artisan reverb:start --host="127.0.0.1" --port=1126 --hostname="ailverchi.ae"';
+    protected $description = 'php artisan reverb:start --host="0.0.0.0" --port=1126 --hostname="ailverchi.ae"';
 
     /**
      * Execute the console command.

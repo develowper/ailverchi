@@ -66,6 +66,8 @@ import SupportChat from "@/Components/SupportChat.vue";
 import mitt from 'mitt'
 import favicon from "@/../images/logo.png";
 import {Dropdown, initTE, Modal} from "tw-elements";
+// import {Server} from "socket.io";
+import {io} from "socket.io-client";
 
 export const emitter = mitt()
 export default {
@@ -109,7 +111,7 @@ export default {
         });
 
         this.initSocket();
-
+        this.initSocketIO();
     },
     methods: {
         initSocket() {
@@ -131,8 +133,21 @@ export default {
             }).error((e) => {
                 console.log(e);
             });
-        }
+        },
+        initSocketIO() {
+            const socket = io("http://ailverchi.ae", {
+                transports: ['websocket', 'polling', 'flashsocket'],
+                path: ''
+            });
 
+            // socket.on("hello", (arg) => {
+            //     console.log(arg);
+            // });
+            // socket.on('connect', () => {
+            //     console.log('Connected to server');
+            // });
+            // socket.emit("hello", "stranger");
+        }
     },
 }
 </script>

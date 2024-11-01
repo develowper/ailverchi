@@ -13,6 +13,14 @@ app.get('/', (req, res) => {
 });
 io.on('connection', (socket) => {
     console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+    socket.on('chat message', (msg) => {
+        // socket.broadcast.emit('chat message', msg); //send to all except sender
+        io.emit('chat message', msg); //send to all
+
+    });
 });
 server.listen(3003, () => {
     console.log('server running at http://localhost:3003');
