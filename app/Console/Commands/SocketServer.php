@@ -34,7 +34,7 @@ class SocketServer extends Command
             $port = 1126;
             if (!$this->portIsUsed($port)) {
 
-                $res = Artisan::call("reverb:start", ["--host" => "127.0.0.1", "--port" => $port, "--hostname" => "ailverchi.ae", /*"--no-interaction" => true, "--debug" => true*/]);
+                $res = Artisan::call("reverb:start", ["--host" => "0.0.0.0", "--port" => $port, "--hostname" => "ailverchi.ae", /*"--no-interaction" => true, "--debug" => true*/]);
                 SocketServer::sendMessage(SocketServer::LOGS[0], print_r($res, true));
             }
 
