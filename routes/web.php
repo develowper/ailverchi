@@ -36,6 +36,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use App\Http\Helpers\Pay;
 use App\Http\Helpers\SMSHelper;
+use App\Http\Helpers\SocketHelper;
 use App\Http\Helpers\Telegram;
 use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
@@ -84,6 +85,7 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
+    (new SocketHelper())->emit('NewMessage', ['message' => 'elephant event']);
 
     return event(new \App\Events\NewMessage('hi'));
 //    return url('') . "/api/payment/done";
