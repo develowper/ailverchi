@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Helpers\SocketHelper;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -44,6 +45,10 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastWith() //attributes in payload event
     {
-        return ['message' => $this->message];
+        $data = ['message' => $this->message];
+
+        (new SocketHelper())->emit('NewMessage', $data);
+
+        return $data;
     }
 }
