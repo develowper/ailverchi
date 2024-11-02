@@ -85,7 +85,7 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
-    (new SocketHelper())->emit('NewMessage', ['message' => 'elephant event']);
+//    (new SocketHelper())->emit('NewMessage', ['message' => 'elephant event']);
 
     return event(new \App\Events\NewMessage('hi'));
 //    return url('') . "/api/payment/done";
