@@ -12,7 +12,7 @@ class SocketHelper
     public function __construct()
     {
         $this->options = ['client' => ElephantIOClient::CLIENT_4X];
-        $this->client = ElephantIOClient::create(env('REVERB_HOST'), $this->options);
+        $this->client = ElephantIOClient::create(env('REVERB_SERVER_HOST'), $this->options);
         $this->client->connect();
         $this->client->of('/'); // can be omitted if connecting to default namespace
     }
