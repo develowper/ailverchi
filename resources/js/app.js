@@ -14,7 +14,9 @@ import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist';
 import Mixins from "@/vue-mixins";
 import LoadScript from 'vue-plugin-load-script';
 import VueDragscroll from "vue-dragscroll";
+import {Buffer} from "buffer";
 
+window.Buffer = window.Buffer || Buffer;
 import './scripts';
 import mitt from 'mitt';
 

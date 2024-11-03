@@ -7,7 +7,18 @@ use ElephantIO\Client as ElephantIOClient;
 class SocketHelper
 {
     public $client, $options;
+    private static $instance = NULL;
 
+    public function getInstance()
+    {
+
+        if (NULL == self::$instance) {
+            self::$instance = new SocketHelper;
+        }
+
+        return self::$instance;
+
+    }
 
     public function __construct()
     {

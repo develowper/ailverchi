@@ -32,6 +32,7 @@
         "@he-tree/vue": "^2.8.7",
         "@heroicons/vue": "^2.1.5",
         "@vitejs/plugin-legacy": "^5.4.3",
+        "buffer": "^6.0.3",
         "chart.js": "^4.4.6",
         "ckeditor5": "^43.3.0",
         "cropperjs": "^1.6.2",

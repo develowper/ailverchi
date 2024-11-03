@@ -67,7 +67,7 @@ import mitt from 'mitt'
 import favicon from "@/../images/logo.png";
 import {Dropdown, initTE, Modal} from "tw-elements";
 // import {Server} from "socket.io";
-import {io} from "socket.io-client";
+
 
 export const emitter = mitt()
 export default {
@@ -110,18 +110,30 @@ export default {
             this.loading = e;
         });
 
-        this.initSocket();
+        // this.initSocket();
         this.initSocketIO();
     },
     methods: {
         initSocket() {
-            window.Echo.channel/*private*/(`room`)
+            window.Echo.join(`ROOM`)
+                .here((data) => {
+                    console.log('joined room')
+                }).listen('NewMessage', (data) => {
+                console.log(data)
+            })
+                .joining((data) => {
+                    console.log('joining')
+                });
+
+            window.Echo.channel(`ROOM`)
                 .listen('NewMessage', (e) => {
                     this.$refs.toast.show('success', e);
                     console.log(e);
-                }).listenToAll((event, data) => {
-                console.log(event, data)
-            })
+                })
+
+                // .listenToAll((event, data) => {
+                //     console.log(event, data)
+                // })
                 .notification((notification) => {
                     console.log(notification.type);
                 })
@@ -135,18 +147,30 @@ export default {
             });
         },
         initSocketIO() {
-            const socket = io("http://ailverchi.ae", {
-                transports: ['websocket', 'polling', 'flashsocket'],
-                path: ''
-            });
+            const socket = io(
+                "https://socket.ailverchi.ae", {
+                    transports: ['websocket'/*, 'polling', 'flashsocket'*/],
+                    // path: '/',
+                    // cors: true,
+                    // origins: ['*'],
+                });
 
+            // socket.onAny((name, arg) => {
+            //     console.log("onAny " + name);
+            //     // console.log(arg);
+            // });
             // socket.on("hello", (arg) => {
             //     console.log(arg);
             // });
-            // socket.on('connect', () => {
-            //     console.log('Connected to server');
-            // });
-            // socket.emit("hello", "stranger");
+            socket.on("NewMessage", (arg) => {
+                console.log("NewMessage " + arg);
+            });
+            socket.on('connect', () => {
+                console.log('Connected to server');
+                // socket.emit("hello", "stranger");
+
+            });
+            // socket.emit("hello", `hello from  `);
         }
     },
 }

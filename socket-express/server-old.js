@@ -7,6 +7,8 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
+const hostname = process.env.HOST || "localhost";
+const port = process.env.PORT || 1624;
 app.get('/', (req, res) => {
     res.sendFile(join(__dirname, 'index.html'));
 
@@ -22,6 +24,6 @@ io.on('connection', (socket) => {
 
     });
 });
-server.listen(1126, () => {
-    console.log('server running at http://localhost:1126');
+server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
 });

@@ -19,12 +19,12 @@ window.io = io;
 window.Echo = new Echo({
     // broadcaster: 'reverb',
     broadcaster: 'socket.io',
-    client: io,
-    auth: {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-    },
+    // client: io,
+    // auth: {
+    //     headers: {
+    //         'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //     }
+    // },
     // auth: {headers: {Authorization: 'Bearer-token'}},
     // "authHost": null,
     // "authEndpoint": "/broadcasting/auth",

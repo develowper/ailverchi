@@ -37,7 +37,7 @@ return [
 //                    'local_cert' => env('SSL_CERTIFICATE'),
 //                    'local_pk' => env('SSL_CERTIFICATE_KEY'),
 //                    'verify_peer' => env('APP_ENV') !== 'local',
-                    'verify_peer' => false,
+//                    'verify_peer' => false,
 //                    'allow_self_signed' => env('APP_ENV') !== 'production',
                 ],
             ],
