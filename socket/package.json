@@ -1,0 +1,22 @@
+{
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "nuxt build",
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare"
+    },
+    "dependencies": {
+        "nuxt": "^3.13.2",
+        "vue": "latest",
+        "vue-router": "latest"
+    },
+    "devDependencies": {
+        "rollup-plugin-node-polyfills": "^0.2.1",
+        "vite-plugin-node-polyfills": "^0.17.0"
+    }
+}
