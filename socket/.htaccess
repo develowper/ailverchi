@@ -5,7 +5,7 @@
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /app.js [L]
-#  RewriteRule ^/?(.*)$ http://127.0.0.1:5800/$1 [P,L]
+  RewriteRule ^/?(.*)$ http://127.0.0.1:5800/$1 [P,L]
 </IfModule>
 
 ## DO NOT REMOVE. PARSWEBSERVER DEVELOPER CONFIGURATION BEGIN
