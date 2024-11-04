@@ -1,5 +1,6 @@
 {
     "name": "nuxt-app",
+    "main": "start.js",
     "private": true,
     "type": "module",
     "scripts": {
