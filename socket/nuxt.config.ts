@@ -3,12 +3,43 @@
 
 
 export default defineNuxtConfig({
-    modules: ['@nuxtjs/tailwindcss'],
+    modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-auth-sanctum'],
     css: ['@/assets/css/style.css'],
     ssr: true,
+
+    sanctum: {
+        baseUrl: 'http://localhost:80', // Laravel API
+        redirect: {
+            onAuthOnly: '/login',
+            onGuestOnly: '/profile',
+        },
+        globalMiddleware: {
+            enabled: true,
+        },
+    },
     // experimental: {
     //     payloadExtraction: false
     // },
+    router: {
+        extendRoutes(routes, resolve) {
+            // routes.push({
+            //     name: 'n',
+            //     path: '/',
+            //     component: resolve(__dirname, '~/pages/index.vue'),
+            // })
+            // return [...routes,
+            //     {
+            //         path: '/',
+            //         name: 'n',
+            //         component: () => import('~/pages/index.vue'),
+            //     }, {
+            //         path: '/login',
+            //         name: 'login',
+            //         component: () => import('~/pages/auth/login.vue'),
+            //     },
+            // ]
+        }
+    },
     // router: {
     //     options: {
     //         strict: false
