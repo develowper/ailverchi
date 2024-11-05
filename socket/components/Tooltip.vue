@@ -15,11 +15,10 @@
 </template>
 <script setup>
 
-import {initTE, Tooltip} from "tw-elements";
 import {onMounted, defineProps, reactive} from "vue";
 
 onMounted(() => {
-    initTE({Tooltip});
+    // initTE({Tooltip});
 });
 defineProps({
     title: String,

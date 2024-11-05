@@ -12,9 +12,17 @@ export default defineNuxtConfig({
         },
         //here just access in server
     },
-
+    // head: {
+    //     script: [
+    //         {
+    //             src: "@/assets/js/script.js",
+    //             body: true,
+    //         },
+    //     ],
+    // },
     modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-auth-sanctum'],
     css: ['@/assets/css/style.css'],
+    js: ['@/assets/js/script.js'],
     ssr: true,
 
     sanctum: {

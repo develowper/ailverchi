@@ -10,6 +10,7 @@
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
+
 const clientConfig = useRuntimeConfig();
 // auth.global.ts adds auth to all routes
 
