@@ -1,9 +1,9 @@
 <template>
     <NuxtLayout name="default">
         <div class="flex flex-col items-center justify-center" style="height: 100vh">
-            <Tooltip content="list of todos">
-                <h1>Todos:{{ todos }}</h1>
-            </Tooltip>
+<!--            <Tooltip content="list of todos">-->
+            <!--                <h1>Todos:{{ todos }}</h1>-->
+            <!--            </Tooltip>-->
 
 
         </div>
