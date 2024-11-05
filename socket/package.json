@@ -1,6 +1,6 @@
 {
     "name": "nuxt-app",
-    "main": "start.js",
+    "main": "/.output/server/index.mjs",
     "private": true,
     "type": "module",
     "scripts": {
