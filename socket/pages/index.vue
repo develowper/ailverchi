@@ -22,21 +22,21 @@ definePageMeta({
 
 //useFetch add data in server side   ( seo friendly ): $fetch does not!
 const page = ref(1);
-const {
-    data: todos,
-    error,
-    refresh: getProducts,
-    pending,
-} = await useFetch('/products', {
-    headers: {
-        Authorization: `Bearer ${clientConfig.public.appSecret}`
-    },
-    baseURL: clientConfig.public.baseURL,
-    params: {page: page}
-})
+// const {
+//     data: todos,
+//     error,
+//     refresh: getProducts,
+//     pending,
+// } = await useFetch('/products', {
+//     headers: {
+//         Authorization: `Bearer ${clientConfig.public.appSecret}`
+//     },
+//     baseURL: clientConfig.public.baseURL,
+//     params: {page: page}
+// })
 
-function getData() {
-    page.value++;
-    getProducts();
-}
+// function getData() {
+//     page.value++;
+//     getProducts();
+// }
 </script>
