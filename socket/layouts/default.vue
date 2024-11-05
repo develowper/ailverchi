@@ -3,7 +3,7 @@
         <header>
             <ul>
                 <li>
-                    <nuxt-link :to="{name:'index'}">Home</nuxt-link>
+                    <nuxt-link to="/">Home</nuxt-link>
                 </li>
                 <li>
                     <nuxt-link to="/about">About</nuxt-link>

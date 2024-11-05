@@ -1,19 +1,24 @@
 <template>
     <NuxtLayout name="default">
         <div class="flex flex-col items-center justify-center" style="height: 100vh">
-<!--            <Tooltip content="list of todos">-->
-            <!--                <h1>Todos:{{ todos }}</h1>-->
-            <!--            </Tooltip>-->
 
+            <Tooltip content="list of todos">
+                <h1>Todos: </h1>
+                <TodoList/>
+            </Tooltip>
+            <div>
+                <TodoForm/>
+
+            </div>
 
         </div>
     </NuxtLayout>
 </template>
 <script lang="ts" setup>
 
-// const clientConfig = useRuntimeConfig();
-// auth.global.ts adds auth to all routes
 
+const clientConfig = useRuntimeConfig();
+const {todoList: todos} = useTodo()
 definePageMeta({
     sanctum: {
         excluded: true,

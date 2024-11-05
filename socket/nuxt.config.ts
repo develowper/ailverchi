@@ -40,22 +40,22 @@ export default defineNuxtConfig({
     // },
     router: {
         extendRoutes(routes, resolve) {
-            // routes.push({
-            //     name: 'n',
-            //     path: '/',
-            //     component: resolve(__dirname, '~/pages/index.vue'),
-            // })
-            // return [...routes,
-            //     {
-            //         path: '/',
-            //         name: 'n',
-            //         component: () => import('~/pages/index.vue'),
-            //     }, {
-            //         path: '/login',
-            //         name: 'login',
-            //         component: () => import('~/pages/auth/login.vue'),
-            //     },
-            // ]
+            routes.push({
+                name: '/',
+                path: '/',
+                component: resolve(__dirname, '~/pages/index.vue'),
+            })
+            return [...routes,
+                {
+                    path: '/',
+                    name: 'n',
+                    component: () => import('~/pages/index.vue'),
+                }, {
+                    path: '/login',
+                    name: 'login',
+                    component: () => import('~/pages/auth/login.vue'),
+                },
+            ]
         }
     },
     // router: {
