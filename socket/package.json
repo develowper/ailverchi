@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "nuxt dev",
+        "start": "nuxt build && nuxt dev",
         "start2": "nuxt build && node start.js",
         "build": "nuxt build",
         "dev": "nuxt dev",
