@@ -3,6 +3,7 @@ export default function useTodo() {
 
     const todoList = useState('todoList', () => []); //access globally
 
+    
     function addTodo(item) {
         todoList.value.push(item);
     }
