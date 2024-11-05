@@ -17,6 +17,7 @@ import {
 } from "tw-elements";
 import axios, {isCancel, AxiosError} from 'axios';
 
+console.log('script load')
 
 window.axios = axios.create();
 window.axios.interceptors.response.use(undefined, function (error) {
@@ -34,7 +35,7 @@ window.axios.interceptors.response.use(undefined, function (error) {
     }
 );
 window.onload = (event) => {
-    console.log('script load')
+
     window.tailwindElements();
     try {
         if (
