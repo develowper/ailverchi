@@ -3,12 +3,22 @@
 
 
 export default defineNuxtConfig({
+
+    runtimeConfig: {
+        public: {
+            //  here access in server and client
+            baseUrl: "https://ailverchi.ae/api/v1",
+            appSecret: "",
+        },
+        //here just access in server
+    },
+
     modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-auth-sanctum'],
     css: ['@/assets/css/style.css'],
     ssr: true,
 
     sanctum: {
-        baseUrl: 'http://localhost:80', // Laravel API
+        baseUrl: 'http://localhost', // Laravel API
         redirect: {
             onAuthOnly: '/login',
             onGuestOnly: '/profile',
@@ -46,6 +56,12 @@ export default defineNuxtConfig({
     //     }
     // },
     // sourcemap: false,
+    postcss: {
+        plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
+        },
+    },
     compatibilityDate: '2024-04-03',
     devtools: {enabled: true},
     content: {
