@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BotController;
+use App\Http\Controllers\GuaranteeController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,8 @@ Route::post('/chat/broadcast', [App\Http\Controllers\PushController::class, 'bro
 Route::post('/chat/chatsupporthistory', [App\Http\Controllers\PushController::class, 'chatSupportHistory'])->name('chat.support.history');
 
 
-Route::any('payment/done', [TransactionController    ::class, 'payDone'])->name('eblagh.payment.done');
+Route::any('payment/done', [TransactionController::class, 'payDone'])->name('payment.done');
+Route::get('guarantee/sms-verify', [GuaranteeController::class, 'smsVerify'])->name('guarantee.sms');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
