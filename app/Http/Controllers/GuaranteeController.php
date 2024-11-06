@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\SMSHelper;
 use App\Http\Helpers\Telegram;
+use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
 use App\Http\Requests\GuaranteeRequest;
 use App\Models\Admin;
@@ -25,6 +26,21 @@ use Morilog\Jalali\Jalalian;
 class GuaranteeController extends Controller
 {
     //
+
+    public function smsVerify(Request $request)
+    {
+        Telegram::log(null, 'sms_received', $request);
+        $from = $request->from;
+        $text = $request->text ?? "";
+        $text = explode(' ', $text);
+        if (count($text) != 2) return;
+        $operator = Admin::where('phone', $from)->first();
+        if (!$operator) return;
+        $guarantee = Util::f2e(trim($text[0] ?? ""));
+        $phone = Util::f2e(trim($text[1] ?? ""));
+
+    }
+
     public function create(GuaranteeRequest $request)
     {
 
