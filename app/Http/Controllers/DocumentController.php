@@ -17,7 +17,7 @@ class DocumentController extends Controller
         $exists = count($matchingFiles) > 0;
         $doc = (object)[
             'title' => !$exists ? $name : __('item_not_found'),
-            'url' => $exists ? route('storage.docs', ['name' => $name]) : null
+            'url' => $exists ? route('storage.docs') . "/$name" : null
         ];
         return Inertia::render('Document/View', [
             'doc' => $doc,
