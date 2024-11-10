@@ -5,7 +5,7 @@
         </template>
 
         <div class="mt-24    p-8">
-            <div>{{ doc.url }}</div>
+            <!--            <div>{{ doc.url }}</div>-->
             <div class=" flex h-screen  ">
                 <iframe v-if="doc.url" class=" w-full "
                         :src="`https://view.officeapps.live.com/op/view.aspx?src=${doc.url}`"
