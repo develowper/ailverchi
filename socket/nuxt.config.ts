@@ -1,28 +1,46 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import {nodePolyfills} from 'vite-plugin-node-polyfills';
+import legacy from '@vitejs/plugin-legacy'
 
 
 export default defineNuxtConfig({
+
+    css: ['@/assets/css/style.css'],
 
     runtimeConfig: {
         public: {
             //  here access in server and client
             baseUrl: "https://ailverchi.ae/api/v1",
-            appSecret: "",
         },
         //here just access in server
+        appSecret: "",
+        DB_DATABASE: process.env.DB_DATABASE,
+        DB_HOST: process.env.DB_HOST,
+        DB_USERNAME: process.env.DB_USERNAME,
+        DB_PASSWORD: process.env.DB_PASSWORD,
     },
-    // head: {
-    //     script: [
-    //         {
-    //             src: "@/assets/js/script.js",
-    //             body: true,
-    //         },
-    //     ],
+    // app: {
+    //     head: {
+    //         script: [
+    //             {
+    //                 type: 'text/javascript',
+    //                 src: "~/assets/js/script.js",
+    //                 tagPosition: 'bodyClose'
+    //                 //         },
+    //             }
+    //         ],
+    //     }
     // },
-    modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-auth-sanctum'],
-    css: ['@/assets/css/style.css'],
-    js: ['@/assets/js/script.js'],
+
+    modules: [
+        '@nuxtjs/tailwindcss',
+        '@pinia/nuxt',
+        // 'nuxt-auth-sanctum',
+        // '@nuxtjs/supabase',
+        '@nuxt/image-edge',
+        '@prisma/nuxt',
+    ],
+
     ssr: true,
 
     sanctum: {
@@ -39,24 +57,19 @@ export default defineNuxtConfig({
     //     payloadExtraction: false
     // },
     router: {
-        extendRoutes(routes, resolve) {
-            routes.push({
-                name: '/',
-                path: '/',
-                component: resolve(__dirname, '~/pages/index.vue'),
-            })
-            return [...routes,
-                {
-                    path: '/',
-                    name: 'n',
-                    component: () => import('~/pages/index.vue'),
-                }, {
-                    path: '/login',
-                    name: 'login',
-                    component: () => import('~/pages/auth/login.vue'),
-                },
-            ]
-        }
+        // extendRoutes(routes, resolve) {
+        //     routes.push({
+        //         name: '/',
+        //         path: 'index',
+        //         component: resolve(__dirname, 'pages/index.vue'),
+        //     });
+        //     routes.push({
+        //         path: '/login',
+        //         name: 'login',
+        //         component: () => resolve(__dirname, 'pages/auth/login.vue'),
+        //     })
+        //
+        // }
     },
     // router: {
     //     options: {
@@ -95,6 +108,10 @@ export default defineNuxtConfig({
         },
     },
     vite: {
+        content: [
+            `~/assets/js/*.{js,ts}`,
+        ],
+
         css: {
             preprocessorOptions: {
                 scss: {
@@ -102,6 +119,7 @@ export default defineNuxtConfig({
                 }
             }
         },
+
         postcss: {
             plugins: {
                 'postcss-nested': {},
@@ -109,6 +127,10 @@ export default defineNuxtConfig({
             }
         },
         plugins: [
+            '@/assets/js/script.js'
+            // legacy({
+            //     targets: ['since 2015'],
+            // }),
             // nodePolyfills({
             //     // protocolImports: true,
             //     // include: [

@@ -111,7 +111,7 @@ export default {
         });
 
         // this.initSocket();
-        this.initSocketIO();
+        // this.initSocketIO();
     },
     methods: {
         initSocket() {

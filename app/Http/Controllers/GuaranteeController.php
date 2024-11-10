@@ -36,8 +36,16 @@ class GuaranteeController extends Controller
         if (count($text) != 2) return;
         $operator = Admin::where('phone', $from)->first();
         if (!$operator) return;
-        $guarantee = Util::f2e(trim($text[0] ?? ""));
+        $smsHelper = new SMSHelper();
+
+        $barcode = Util::f2e(trim($text[0] ?? ""));
         $phone = Util::f2e(trim($text[1] ?? ""));
+        $id = substr($barcode, 0, strlen($barcode) - 12);
+        $sample = Sample::find($id);
+        if (!$sample || !$sample->guarantee_months)
+            $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+        if (!$sample)
+            $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
 
     }
 

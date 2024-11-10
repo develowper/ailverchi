@@ -1,0 +1,1370 @@
+// npx prisma db pull
+// mkdir prisma/0_init
+// npx prisma migrate diff  --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql
+// npx prisma migrate resolve --applied 0_init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DB_URL")
+}
+
+model admin_financials {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    admin_id   BigInt?   @db.UnsignedBigInt
+    wallet     Int       @default(0) @db.UnsignedInt
+    card       String?   @db.VarChar(20)
+    sheba      String?   @db.VarChar(30)
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+    admins     admins?   @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "admin_financials_admin_id_foreign")
+
+    @@index([admin_id], map: "admin_financials_admin_id_foreign")
+}
+
+model admins {
+    id                                                        BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+    agency_id                                                 BigInt?              @db.UnsignedBigInt
+    agency_level                                              admins_agency_level?
+    fullname                                                  String               @db.VarChar(100)
+    email                                                     String?              @unique(map: "admins_email_unique") @db.VarChar(100)
+    email_verified_at                                         DateTime?            @db.Timestamp(0)
+    phone                                                     String?              @db.VarChar(20)
+    phone_verified                                            Boolean              @default(false)
+    password                                                  String?              @db.VarChar(200)
+    access                                                    String?              @db.LongText
+    role                                                      admins_role          @default(god)
+    status                                                    admins_status        @default(active)
+    notifications                                             Int                  @default(0) @db.UnsignedInt
+    wallet                                                    Int                  @default(0) @db.UnsignedInt
+    national_code                                             String?              @db.VarChar(20)
+    push_id                                                   String?              @db.VarChar(20)
+    expires_at                                                DateTime?            @db.Timestamp(0)
+    settings                                                  String?              @db.LongText
+    telegram_id                                               String?              @db.VarChar(50)
+    bale_id                                                   String?              @db.VarChar(50)
+    ref_id                                                    String?              @db.VarChar(10)
+    step                                                      Int?                 @db.TinyInt
+    remember_token                                            String?              @db.VarChar(100)
+    created_at                                                DateTime?            @db.Timestamp(0)
+    updated_at                                                DateTime?            @db.Timestamp(0)
+    admin_financials                                          admin_financials[]
+    agencies                                                  agencies?            @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "admins_agency_id_foreign")
+    repositories                                              repositories[]
+    repository_carts                                          repository_carts[]
+    repository_orders_repository_orders_from_admin_idToadmins repository_orders[]  @relation("repository_orders_from_admin_idToadmins")
+    repository_orders_repository_orders_to_admin_idToadmins   repository_orders[]  @relation("repository_orders_to_admin_idToadmins")
+    samples_samples_admin_idToadmins                          samples[]            @relation("samples_admin_idToadmins")
+    samples_samples_operator_idToadmins                       samples[]            @relation("samples_operator_idToadmins")
+
+    @@index([agency_id], map: "admins_agency_id_foreign")
+    @@index([bale_id], map: "admins_bale_id_index")
+    @@index([phone], map: "admins_phone_index")
+    @@index([telegram_id], map: "admins_telegram_id_index")
+}
+
+model agencies {
+    id                                                             BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+    name                                                           String              @db.VarChar(200)
+    phone                                                          String?             @db.VarChar(20)
+    postal_code                                                    String?             @db.VarChar(20)
+    access                                                         String?             @db.LongText
+    level                                                          agencies_level      @default(dbgenerated("2"))
+    parent_id                                                      BigInt?             @db.UnsignedBigInt
+    province_id                                                    Int?                @db.UnsignedSmallInt
+    county_id                                                      Int?                @db.UnsignedSmallInt
+    district_id                                                    Int?                @db.UnsignedSmallInt
+    address                                                        String?             @db.VarChar(2048)
+    location                                                       String?             @db.VarChar(50)
+    status                                                         agencies_status     @default(inactive)
+    wallet                                                         BigInt              @default(0)
+    created_at                                                     DateTime?           @db.Timestamp(0)
+    updated_at                                                     DateTime?           @db.Timestamp(0)
+    order_profit_percent                                           Decimal?            @db.Decimal(4, 2)
+    admins                                                         admins[]
+    cities_agencies_county_idTocities                              cities?             @relation("agencies_county_idTocities", fields: [county_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "agencies_county_id_foreign")
+    cities_agencies_district_idTocities                            cities?             @relation("agencies_district_idTocities", fields: [district_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "agencies_district_id_foreign")
+    agencies                                                       agencies?           @relation("agenciesToagencies", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "agencies_parent_id_foreign")
+    other_agencies                                                 agencies[]          @relation("agenciesToagencies")
+    cities_agencies_province_idTocities                            cities?             @relation("agencies_province_idTocities", fields: [province_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "agencies_province_id_foreign")
+    agency_financials                                              agency_financials[]
+    cars                                                           cars[]
+    drivers                                                        drivers[]
+    orders                                                         orders[]
+    repositories                                                   repositories[]
+    repository_carts                                               repository_carts[]
+    repository_orders_repository_orders_from_agency_idToagencies   repository_orders[] @relation("repository_orders_from_agency_idToagencies")
+    repository_orders_repository_orders_to_agency_idToagencies     repository_orders[] @relation("repository_orders_to_agency_idToagencies")
+    samples                                                        samples[]
+    shipping_methods_shipping_methods_agency_idToagencies          shipping_methods[]  @relation("shipping_methods_agency_idToagencies")
+    shipping_methods_shipping_methods_shipping_agency_idToagencies shipping_methods[]  @relation("shipping_methods_shipping_agency_idToagencies")
+    shippings                                                      shippings[]
+    tickets                                                        tickets[]
+    variations                                                     variations[]
+
+    @@index([county_id], map: "agencies_county_id_foreign")
+    @@index([district_id], map: "agencies_district_id_foreign")
+    @@index([parent_id], map: "agencies_parent_id_foreign")
+    @@index([province_id], map: "agencies_province_id_index")
+}
+
+model agency_financials {
+    id           BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    agency_id    BigInt?   @db.UnsignedBigInt
+    wallet       BigInt    @default(0)
+    parent_debit BigInt    @default(0)
+    card         String?   @db.VarChar(20)
+    sheba        String?   @db.VarChar(30)
+    created_at   DateTime? @db.Timestamp(0)
+    updated_at   DateTime? @db.Timestamp(0)
+    agencies     agencies? @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "agency_financials_agency_id_foreign")
+
+    @@index([agency_id], map: "agency_financials_agency_id_foreign")
+}
+
+model articles {
+    id         BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+    owner_id   BigInt?          @db.UnsignedBigInt
+    author     String?          @db.VarChar(200)
+    title      String           @db.VarChar(1024)
+    slug       String?          @db.VarChar(2048)
+    view       Int              @default(0) @db.UnsignedInt
+    duration   Int              @default(0) @db.UnsignedInt
+    tags       String?          @db.VarChar(200)
+    content    String?          @db.LongText
+    status     articles_status?
+    created_at DateTime?        @db.Timestamp(0)
+    updated_at DateTime?        @db.Timestamp(0)
+    users      users?           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "articles_owner_id_foreign")
+
+    @@index([owner_id], map: "articles_owner_id_foreign")
+}
+
+model cache {
+    key        String @id @db.VarChar(255)
+    value      String @db.MediumText
+    expiration Int
+}
+
+model cache_locks {
+    key        String @id @db.VarChar(255)
+    owner      String @db.VarChar(255)
+    expiration Int
+}
+
+model cars {
+    id           BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+    name         String?     @db.VarChar(100)
+    plate_number String?     @db.VarChar(30)
+    agency_id    BigInt?     @db.UnsignedBigInt
+    created_at   DateTime?   @db.Timestamp(0)
+    updated_at   DateTime?   @db.Timestamp(0)
+    driver_id    BigInt?     @db.UnsignedBigInt
+    agencies     agencies?   @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "cars_agency_id_foreign")
+    drivers      drivers?    @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "cars_driver_id_foreign")
+    shippings    shippings[]
+
+    @@index([agency_id], map: "cars_agency_id_foreign")
+    @@index([driver_id], map: "cars_driver_id_foreign")
+}
+
+model cart_items {
+    id                 BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+    name               String?           @db.VarChar(200)
+    shipping_id        BigInt?           @db.UnsignedBigInt
+    cart_id            BigInt?           @db.UnsignedBigInt
+    variation_id       BigInt?           @db.UnsignedBigInt
+    repo_id            BigInt?           @db.UnsignedBigInt
+    qty                Decimal           @default(0.000) @db.Decimal(8, 3)
+    unit               cart_items_unit   @default(piece)
+    visit_checked      Boolean           @default(false)
+    created_at         DateTime?         @db.Timestamp(0)
+    updated_at         DateTime?         @db.Timestamp(0)
+    delivery_date      DateTime?         @db.Date
+    delivery_timestamp String?           @db.VarChar(15)
+    carts              carts?            @relation(fields: [cart_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "cart_items_cart_id_foreign")
+    repositories       repositories?     @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "cart_items_repo_id_foreign")
+    shipping_methods   shipping_methods? @relation(fields: [shipping_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "cart_items_shipping_id_foreign")
+    variations         variations?       @relation(fields: [variation_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "cart_items_variation_id_foreign")
+
+    @@index([cart_id], map: "cart_items_cart_id_foreign")
+    @@index([repo_id], map: "cart_items_repo_id_foreign")
+    @@index([shipping_id], map: "cart_items_shipping_id_foreign")
+    @@index([variation_id], map: "cart_items_variation_id_foreign")
+}
+
+model carts {
+    id            BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+    user_id       BigInt?      @db.UnsignedBigInt
+    ip            String?      @db.VarChar(45)
+    address_idx   Int?         @db.UnsignedTinyInt
+    last_activity DateTime     @default(now()) @db.Timestamp(0)
+    order_id      BigInt?      @db.UnsignedBigInt
+    created_at    DateTime?    @db.Timestamp(0)
+    updated_at    DateTime?    @db.Timestamp(0)
+    cart_items    cart_items[]
+    orders        orders?      @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "carts_order_id_foreign")
+
+    @@index([last_activity], map: "carts_last_activity_index")
+    @@index([order_id], map: "carts_order_id_foreign")
+    @@index([user_id], map: "carts_user_id_index")
+}
+
+model categories {
+    id               Int               @id @default(autoincrement()) @db.UnsignedInt
+    level            Int               @default(1) @db.UnsignedTinyInt
+    name             String            @db.VarChar(100)
+    status           categories_status @default(active)
+    parent_id        Int?              @db.UnsignedInt
+    children         String?           @db.LongText
+    created_at       DateTime?         @db.Timestamp(0)
+    updated_at       DateTime?         @db.Timestamp(0)
+    categories       categories?       @relation("categoriesTocategories", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "categories_parent_id_foreign")
+    other_categories categories[]      @relation("categoriesTocategories")
+    products         products[]
+    variations       variations[]
+
+    @@index([parent_id], map: "categories_parent_id_foreign")
+}
+
+model cities {
+    id                                                           Int                 @id @db.UnsignedSmallInt
+    parent_id                                                    Int                 @default(0) @db.UnsignedSmallInt
+    name                                                         String              @db.VarChar(50)
+    latitude                                                     String?             @db.VarChar(30)
+    longitude                                                    String?             @db.VarChar(30)
+    slug                                                         String              @db.VarChar(100)
+    level                                                        cities_level        @default(dbgenerated("1"))
+    tags                                                         String              @default("[]") @db.LongText
+    bbox                                                         String              @default("[]") @db.LongText
+    has_child                                                    Boolean             @default(false)
+    radius                                                       Int                 @default(0) @db.UnsignedSmallInt
+    agencies_agencies_county_idTocities                          agencies[]          @relation("agencies_county_idTocities")
+    agencies_agencies_district_idTocities                        agencies[]          @relation("agencies_district_idTocities")
+    agencies_agencies_province_idTocities                        agencies[]          @relation("agencies_province_idTocities")
+    cities                                                       cities              @relation("citiesTocities", fields: [parent_id], references: [id], onUpdate: Restrict, map: "cities_parent_id_foreign")
+    other_cities                                                 cities[]            @relation("citiesTocities")
+    orders_orders_county_idTocities                              orders[]            @relation("orders_county_idTocities")
+    orders_orders_district_idTocities                            orders[]            @relation("orders_district_idTocities")
+    orders_orders_province_idTocities                            orders[]            @relation("orders_province_idTocities")
+    partnerships_partnerships_county_idTocities                  partnerships[]      @relation("partnerships_county_idTocities")
+    partnerships_partnerships_province_idTocities                partnerships[]      @relation("partnerships_province_idTocities")
+    repositories_repositories_county_idTocities                  repositories[]      @relation("repositories_county_idTocities")
+    repositories_repositories_district_idTocities                repositories[]      @relation("repositories_district_idTocities")
+    repositories_repositories_province_idTocities                repositories[]      @relation("repositories_province_idTocities")
+    repository_orders_repository_orders_from_county_idTocities   repository_orders[] @relation("repository_orders_from_county_idTocities")
+    repository_orders_repository_orders_from_district_idTocities repository_orders[] @relation("repository_orders_from_district_idTocities")
+    repository_orders_repository_orders_from_province_idTocities repository_orders[] @relation("repository_orders_from_province_idTocities")
+    repository_orders_repository_orders_to_county_idTocities     repository_orders[] @relation("repository_orders_to_county_idTocities")
+    repository_orders_repository_orders_to_district_idTocities   repository_orders[] @relation("repository_orders_to_district_idTocities")
+    repository_orders_repository_orders_to_province_idTocities   repository_orders[] @relation("repository_orders_to_province_idTocities")
+    users                                                        users[]
+
+    @@index([name], map: "cities_name_index")
+    @@index([parent_id], map: "cities_parent_id_foreign")
+    @@index([slug], map: "cities_slug_index")
+}
+
+model coupons {
+    id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    code             String    @db.VarChar(10)
+    discount_percent Int       @default(0) @db.UnsignedTinyInt
+    created_at       DateTime  @default(now()) @db.Timestamp(0)
+    used_times       Int       @default(0) @db.UnsignedInt
+    used_at          DateTime? @db.Timestamp(0)
+    expires_at       DateTime? @db.Timestamp(0)
+    min_price        Int?      @db.UnsignedInt
+    limit_discount   Int?      @db.UnsignedInt
+    limit_use        Int?      @db.UnsignedInt
+    user_id          BigInt?   @db.UnsignedBigInt
+    users            users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "coupons_user_id_foreign")
+
+    @@index([user_id], map: "coupons_user_id_foreign")
+}
+
+model drivers {
+    id            BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+    fullname      String?     @db.VarChar(200)
+    national_code String?     @db.VarChar(20)
+    phone         String?     @db.VarChar(20)
+    wallet        BigInt      @default(0)
+    card          String?     @db.VarChar(20)
+    sheba         String?     @db.VarChar(30)
+    agency_id     BigInt?     @db.UnsignedBigInt
+    created_at    DateTime?   @db.Timestamp(0)
+    updated_at    DateTime?   @db.Timestamp(0)
+    cars          cars[]
+    agencies      agencies?   @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "drivers_agency_id_foreign")
+    shippings     shippings[]
+
+    @@index([agency_id], map: "drivers_agency_id_foreign")
+    @@index([phone], map: "drivers_phone_index")
+}
+
+model failed_jobs {
+    id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+    uuid       String   @unique(map: "failed_jobs_uuid_unique")
+    connection String   @db.Text
+    queue      String   @db.Text
+    payload    String   @db.LongText
+    exception  String   @db.LongText
+    failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model job_batches {
+    id             String  @id @db.VarChar(255)
+    name           String  @db.VarChar(255)
+    total_jobs     Int
+    pending_jobs   Int
+    failed_jobs    Int
+    failed_job_ids String  @db.LongText
+    options        String? @db.MediumText
+    cancelled_at   Int?
+    created_at     Int
+    finished_at    Int?
+}
+
+model jobs {
+    id           BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+    queue        String @db.VarChar(255)
+    payload      String @db.LongText
+    attempts     Int    @db.UnsignedTinyInt
+    reserved_at  Int?   @db.UnsignedInt
+    available_at Int    @db.UnsignedInt
+    created_at   Int    @db.UnsignedInt
+
+    @@index([queue], map: "jobs_queue_index")
+}
+
+model logs {
+    id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+    model      String?  @db.VarChar(50)
+    from       String?  @db.LongText
+    to         String?  @db.LongText
+    created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model messages {
+    id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    fullname    String?   @db.VarChar(100)
+    phone       String?   @db.VarChar(20)
+    type        String?   @db.VarChar(10)
+    description String?   @db.Text
+    created_at  DateTime? @db.Timestamp(0)
+    updated_at  DateTime? @db.Timestamp(0)
+
+    @@index([type], map: "messages_type_index")
+}
+
+model migrations {
+    id        Int    @id @default(autoincrement()) @db.UnsignedInt
+    migration String
+    batch     Int
+}
+
+model notifications {
+    id          BigInt                    @id @default(autoincrement()) @db.UnsignedBigInt
+    subject     String                    @db.VarChar(100)
+    data_id     BigInt?                   @db.UnsignedBigInt
+    type        notifications_type?
+    description String?                   @db.Text
+    link        String?                   @db.VarChar(512)
+    owner_id    BigInt?                   @db.UnsignedBigInt
+    owner_type  notifications_owner_type?
+    created_at  DateTime                  @default(now()) @db.Timestamp(0)
+}
+
+model order_items {
+    id                 BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+    name               String?            @db.VarChar(200)
+    title              String?            @db.VarChar(1024)
+    shipping_id        BigInt?            @db.UnsignedBigInt
+    shipping_method_id BigInt?            @db.UnsignedBigInt
+    order_id           BigInt?            @db.UnsignedBigInt
+    variation_id       BigInt?            @db.UnsignedBigInt
+    repo_id            BigInt?            @db.UnsignedBigInt
+    qty                Decimal            @default(0.000) @db.Decimal(8, 3)
+    unit               order_items_unit   @default(piece)
+    total_price        BigInt             @db.UnsignedBigInt
+    discount_price     BigInt             @db.UnsignedBigInt
+    pack_id            Int?               @db.UnsignedInt
+    total_weight       Decimal            @default(0.000) @db.Decimal(8, 3)
+    grade              order_items_grade?
+    created_at         DateTime?          @db.Timestamp(0)
+    updated_at         DateTime?          @db.Timestamp(0)
+    orders             orders?            @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "order_items_order_id_foreign")
+    packs              packs?             @relation(fields: [pack_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "order_items_pack_id_foreign")
+    repositories       repositories?      @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "order_items_repo_id_foreign")
+    shipping_methods   shipping_methods?  @relation(fields: [shipping_method_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "order_items_shipping_method_id_foreign")
+    variations         variations?        @relation(fields: [variation_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "order_items_variation_id_foreign")
+
+    @@index([order_id], map: "order_items_order_id_foreign")
+    @@index([pack_id], map: "order_items_pack_id_foreign")
+    @@index([repo_id], map: "order_items_repo_id_foreign")
+    @@index([shipping_id], map: "order_items_shipping_id_foreign")
+    @@index([shipping_method_id], map: "order_items_shipping_method_id_foreign")
+    @@index([variation_id], map: "order_items_variation_id_foreign")
+}
+
+model order_payments {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+}
+
+model orders {
+    id                                BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+    repo_id                           BigInt?           @db.UnsignedBigInt
+    agency_id                         BigInt?           @db.UnsignedBigInt
+    transaction_id                    BigInt?           @db.UnsignedBigInt
+    user_id                           BigInt?           @db.UnsignedBigInt
+    status                            orders_status
+    province_id                       Int?              @db.UnsignedSmallInt
+    county_id                         Int?              @db.UnsignedSmallInt
+    district_id                       Int?              @db.UnsignedSmallInt
+    receiver_fullname                 String?           @db.VarChar(200)
+    receiver_phone                    String?           @db.VarChar(20)
+    postal_code                       String?           @db.VarChar(20)
+    address                           String?           @db.VarChar(2048)
+    location                          String?           @db.VarChar(50)
+    coupon                            String?           @db.VarChar(10)
+    total_discount                    BigInt            @default(0) @db.UnsignedBigInt
+    total_items                       Int               @default(0) @db.UnsignedInt
+    total_price                       BigInt            @default(0) @db.UnsignedBigInt
+    total_items_price                 BigInt            @default(0) @db.UnsignedBigInt
+    total_shipping_price              BigInt            @default(0) @db.UnsignedBigInt
+    change_price                      BigInt            @default(0)
+    created_at                        DateTime?         @db.Timestamp(0)
+    updated_at                        DateTime?         @db.Timestamp(0)
+    done_at                           DateTime?         @db.Timestamp(0)
+    shipping_id                       BigInt?           @db.UnsignedBigInt
+    shipping_method_id                BigInt?           @db.UnsignedBigInt
+    delivery_date                     DateTime?         @db.Date
+    delivery_timestamp                String?           @db.VarChar(15)
+    pay_type                          orders_pay_type?
+    payed_at                          DateTime?         @db.Timestamp(0)
+    distance                          Int?              @db.UnsignedInt
+    tax_price                         Int               @default(0) @db.UnsignedInt
+    total_weight                      Decimal           @default(0.000) @db.Decimal(8, 3)
+    carts                             carts[]
+    order_items                       order_items[]
+    agencies                          agencies?         @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_agency_id_foreign")
+    cities_orders_county_idTocities   cities?           @relation("orders_county_idTocities", fields: [county_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_county_id_foreign")
+    cities_orders_district_idTocities cities?           @relation("orders_district_idTocities", fields: [district_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_district_id_foreign")
+    cities_orders_province_idTocities cities?           @relation("orders_province_idTocities", fields: [province_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_province_id_foreign")
+    repositories                      repositories?     @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_repo_id_foreign")
+    shippings                         shippings?        @relation(fields: [shipping_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_shipping_id_foreign")
+    shipping_methods                  shipping_methods? @relation(fields: [shipping_method_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_shipping_method_id_foreign")
+    transactions                      transactions?     @relation(fields: [transaction_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "orders_transaction_id_foreign")
+
+    @@index([agency_id], map: "orders_agency_id_foreign")
+    @@index([county_id], map: "orders_county_id_foreign")
+    @@index([district_id], map: "orders_district_id_foreign")
+    @@index([province_id], map: "orders_province_id_foreign")
+    @@index([repo_id], map: "orders_repo_id_foreign")
+    @@index([shipping_id], map: "orders_shipping_id_foreign")
+    @@index([shipping_method_id], map: "orders_shipping_method_id_foreign")
+    @@index([status], map: "orders_status_index")
+    @@index([transaction_id], map: "orders_transaction_id_foreign")
+    @@index([user_id], map: "orders_user_id_index")
+}
+
+model packs {
+    id                     Int                      @id @default(autoincrement()) @db.UnsignedInt
+    name                   String                   @db.VarChar(200)
+    weight                 Int                      @default(0) @db.UnsignedInt
+    height                 Int                      @default(0) @db.UnsignedInt
+    width                  Int                      @default(0) @db.UnsignedInt
+    length                 Int                      @default(0) @db.UnsignedInt
+    price                  Int                      @default(0) @db.UnsignedInt
+    status                 packs_status             @default(inactive)
+    created_at             DateTime?                @db.Timestamp(0)
+    updated_at             DateTime?                @db.Timestamp(0)
+    order_items            order_items[]
+    repository_order_items repository_order_items[]
+    variations             variations[]
+}
+
+model partnerships {
+    id                                      BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+    fullname                                String             @db.VarChar(100)
+    meterage                                String?            @db.VarChar(10)
+    province_id                             Int?               @db.UnsignedSmallInt
+    county_id                               Int?               @db.UnsignedSmallInt
+    address                                 String?            @db.VarChar(2048)
+    description                             String?            @db.VarChar(2048)
+    products                                String?            @db.LongText
+    phone                                   String?            @db.VarChar(20)
+    type                                    partnerships_type?
+    created_at                              DateTime?          @db.Timestamp(0)
+    updated_at                              DateTime?          @db.Timestamp(0)
+    cities_partnerships_county_idTocities   cities?            @relation("partnerships_county_idTocities", fields: [county_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "partnerships_county_id_foreign")
+    cities_partnerships_province_idTocities cities?            @relation("partnerships_province_idTocities", fields: [province_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "partnerships_province_id_foreign")
+
+    @@index([county_id], map: "partnerships_county_id_foreign")
+    @@index([province_id], map: "partnerships_province_id_index")
+}
+
+model password_resets {
+    email      String    @id @db.VarChar(100)
+    token      String    @db.VarChar(2048)
+    created_at DateTime? @db.Timestamp(0)
+}
+
+model payments {
+    id          BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+    user_id     BigInt?              @db.UnsignedBigInt
+    app_version Int?                 @db.UnsignedSmallInt
+    order_id    String?              @db.VarChar(50)
+    pay_for     String?              @db.VarChar(50)
+    pay_market  payments_pay_market?
+    info        String?              @db.VarChar(2048)
+    amount      Int                  @default(0)
+    is_success  Boolean              @default(false)
+    created_at  DateTime?            @db.Timestamp(0)
+    updated_at  DateTime?            @db.Timestamp(0)
+    users       users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "payments_user_id_foreign")
+
+    @@index([user_id], map: "payments_user_id_foreign")
+}
+
+model personal_access_tokens {
+    id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    tokenable_type String
+    tokenable_id   BigInt    @db.UnsignedBigInt
+    name           String
+    token          String    @unique(map: "personal_access_tokens_token_unique") @db.VarChar(64)
+    abilities      String?   @db.Text
+    last_used_at   DateTime? @db.Timestamp(0)
+    expires_at     DateTime? @db.Timestamp(0)
+    created_at     DateTime? @db.Timestamp(0)
+    updated_at     DateTime? @db.Timestamp(0)
+
+    @@index([tokenable_type, tokenable_id], map: "personal_access_tokens_tokenable_type_tokenable_id_index")
+}
+
+model products {
+    id          BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+    name        String          @db.VarChar(200)
+    category    String?         @db.LongText
+    weight      Decimal         @db.Decimal(8, 3)
+    category_id Int?            @db.UnsignedInt
+    tags        String?         @db.VarChar(1024)
+    status      products_status @default(inactive)
+    sell_count  BigInt          @default(0) @db.UnsignedBigInt
+    charged_at  DateTime?       @db.Timestamp(0)
+    rate        Int?            @db.UnsignedInt
+    created_at  DateTime?       @db.Timestamp(0)
+    updated_at  DateTime?       @db.Timestamp(0)
+    description String?         @db.LongText
+    categories  categories?     @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "products_category_id_foreign")
+    samples     samples[]
+    variations  variations[]
+
+    @@index([category_id], map: "products_category_id_foreign")
+}
+
+model pulse_aggregates {
+    id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+    bucket    Int     @db.UnsignedInt
+    period    Int     @db.UnsignedMediumInt
+    type      String  @db.VarChar(255)
+    key       String  @db.MediumText
+    key_hash  Bytes?  @db.Binary(16)
+    aggregate String  @db.VarChar(255)
+    value     Decimal @db.Decimal(20, 2)
+    count     Int?    @db.UnsignedInt
+
+    @@unique([bucket, period, type, aggregate, key_hash], map: "pulse_aggregates_bucket_period_type_aggregate_key_hash_unique")
+    @@index([period, bucket], map: "pulse_aggregates_period_bucket_index")
+    @@index([period, type, aggregate, bucket], map: "pulse_aggregates_period_type_aggregate_bucket_index")
+    @@index([type], map: "pulse_aggregates_type_index")
+}
+
+model pulse_entries {
+    id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+    timestamp Int     @db.UnsignedInt
+    type      String  @db.VarChar(255)
+    key       String  @db.MediumText
+    key_hash  Bytes?  @db.Binary(16)
+    value     BigInt?
+
+    @@index([key_hash], map: "pulse_entries_key_hash_index")
+    @@index([timestamp], map: "pulse_entries_timestamp_index")
+    @@index([timestamp, type, key_hash, value], map: "pulse_entries_timestamp_type_key_hash_value_index")
+    @@index([type], map: "pulse_entries_type_index")
+}
+
+model pulse_values {
+    id        BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+    timestamp Int    @db.UnsignedInt
+    type      String @db.VarChar(255)
+    key       String @db.MediumText
+    key_hash  Bytes? @db.Binary(16)
+    value     String @db.MediumText
+
+    @@unique([type, key_hash], map: "pulse_values_type_key_hash_unique")
+    @@index([timestamp], map: "pulse_values_timestamp_index")
+    @@index([type], map: "pulse_values_type_index")
+}
+
+model repositories {
+    id                                                             BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+    name                                                           String                   @db.VarChar(200)
+    is_shop                                                        Boolean                  @default(false)
+    agency_id                                                      BigInt?                  @db.UnsignedBigInt
+    admin_id                                                       BigInt?                  @db.UnsignedBigInt
+    province_id                                                    Int?                     @db.UnsignedSmallInt
+    county_id                                                      Int?                     @db.UnsignedSmallInt
+    district_id                                                    Int?                     @db.UnsignedSmallInt
+    address                                                        String?                  @db.VarChar(2048)
+    phone                                                          String?                  @db.VarChar(20)
+    location                                                       String?                  @db.VarChar(50)
+    allow_visit                                                    Boolean                  @default(true)
+    postal_code                                                    String?                  @db.VarChar(20)
+    cities                                                         String?                  @db.LongText
+    status                                                         repositories_status      @default(inactive)
+    created_at                                                     DateTime?                @db.Timestamp(0)
+    updated_at                                                     DateTime?                @db.Timestamp(0)
+    cart_items                                                     cart_items[]
+    order_items                                                    order_items[]
+    orders                                                         orders[]
+    admins                                                         admins?                  @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repositories_admin_id_foreign")
+    agencies                                                       agencies?                @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repositories_agency_id_foreign")
+    cities_repositories_county_idTocities                          cities?                  @relation("repositories_county_idTocities", fields: [county_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repositories_county_id_foreign")
+    cities_repositories_district_idTocities                        cities?                  @relation("repositories_district_idTocities", fields: [district_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repositories_district_id_foreign")
+    cities_repositories_province_idTocities                        cities?                  @relation("repositories_province_idTocities", fields: [province_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repositories_province_id_foreign")
+    repository_cart_items                                          repository_cart_items[]
+    repository_carts                                               repository_carts[]
+    repository_order_items                                         repository_order_items[]
+    repository_orders_repository_orders_from_repo_idTorepositories repository_orders[]      @relation("repository_orders_from_repo_idTorepositories")
+    repository_orders_repository_orders_to_repo_idTorepositories   repository_orders[]      @relation("repository_orders_to_repo_idTorepositories")
+    samples                                                        samples[]
+    shipping_methods                                               shipping_methods[]
+    variations                                                     variations[]
+
+    @@index([admin_id], map: "repositories_admin_id_foreign")
+    @@index([agency_id], map: "repositories_agency_id_foreign")
+    @@index([county_id], map: "repositories_county_id_foreign")
+    @@index([district_id], map: "repositories_district_id_foreign")
+    @@index([province_id], map: "repositories_province_id_index")
+}
+
+model repository_cart_items {
+    id                 BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+    name               String?           @db.VarChar(200)
+    shipping_id        BigInt?           @db.UnsignedBigInt
+    visit_checked      Boolean           @default(false)
+    cart_id            BigInt?           @db.UnsignedBigInt
+    variation_id       BigInt?           @db.UnsignedBigInt
+    repo_id            BigInt?           @db.UnsignedBigInt
+    qty                Decimal           @default(0.000) @db.Decimal(8, 3)
+    created_at         DateTime?         @db.Timestamp(0)
+    updated_at         DateTime?         @db.Timestamp(0)
+    delivery_date      DateTime?         @db.Date
+    delivery_timestamp String?           @db.VarChar(15)
+    repository_carts   repository_carts? @relation(fields: [cart_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_cart_items_cart_id_foreign")
+    repositories       repositories?     @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_cart_items_repo_id_foreign")
+    shipping_methods   shipping_methods? @relation(fields: [shipping_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_cart_items_shipping_id_foreign")
+    variations         variations?       @relation(fields: [variation_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_cart_items_variation_id_foreign")
+
+    @@index([cart_id], map: "repository_cart_items_cart_id_foreign")
+    @@index([repo_id], map: "repository_cart_items_repo_id_foreign")
+    @@index([shipping_id], map: "repository_cart_items_shipping_id_foreign")
+    @@index([variation_id], map: "repository_cart_items_variation_id_foreign")
+}
+
+model repository_carts {
+    id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+    to_repo_id            BigInt?                 @db.UnsignedBigInt
+    to_agency_id          BigInt?                 @db.UnsignedBigInt
+    admin_id              BigInt?                 @db.UnsignedBigInt
+    created_at            DateTime?               @db.Timestamp(0)
+    updated_at            DateTime?               @db.Timestamp(0)
+    repository_cart_items repository_cart_items[]
+    admins                admins?                 @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_carts_admin_id_foreign")
+    agencies              agencies?               @relation(fields: [to_agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_carts_to_agency_id_foreign")
+    repositories          repositories?           @relation(fields: [to_repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_carts_to_repo_id_foreign")
+
+    @@index([admin_id], map: "repository_carts_admin_id_foreign")
+    @@index([to_agency_id], map: "repository_carts_to_agency_id_foreign")
+    @@index([to_repo_id], map: "repository_carts_to_repo_id_foreign")
+}
+
+model repository_order_items {
+    id                 BigInt                        @id @default(autoincrement()) @db.UnsignedBigInt
+    name               String?                       @db.VarChar(200)
+    title              String?                       @db.VarChar(1024)
+    shipping_id        BigInt?                       @db.UnsignedBigInt
+    shipping_method_id BigInt?                       @db.UnsignedBigInt
+    order_id           BigInt?                       @db.UnsignedBigInt
+    variation_id       BigInt?                       @db.UnsignedBigInt
+    repo_id            BigInt?                       @db.UnsignedBigInt
+    qty                Decimal                       @default(0.000) @db.Decimal(8, 3)
+    total_price        BigInt                        @db.UnsignedBigInt
+    discount_price     BigInt                        @db.UnsignedBigInt
+    pack_id            Int?                          @db.UnsignedInt
+    total_weight       Decimal                       @default(0.000) @db.Decimal(8, 3)
+    grade              repository_order_items_grade?
+    created_at         DateTime?                     @db.Timestamp(0)
+    updated_at         DateTime?                     @db.Timestamp(0)
+    repository_orders  repository_orders?            @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_order_items_order_id_foreign")
+    packs              packs?                        @relation(fields: [pack_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_order_items_pack_id_foreign")
+    repositories       repositories?                 @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_order_items_repo_id_foreign")
+    shipping_methods   shipping_methods?             @relation(fields: [shipping_method_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_order_items_shipping_method_id_foreign")
+    variations         variations?                   @relation(fields: [variation_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_order_items_variation_id_foreign")
+
+    @@index([order_id], map: "repository_order_items_order_id_foreign")
+    @@index([pack_id], map: "repository_order_items_pack_id_foreign")
+    @@index([repo_id], map: "repository_order_items_repo_id_foreign")
+    @@index([shipping_id], map: "repository_order_items_shipping_id_foreign")
+    @@index([shipping_method_id], map: "repository_order_items_shipping_method_id_foreign")
+    @@index([variation_id], map: "repository_order_items_variation_id_foreign")
+}
+
+model repository_orders {
+    id                                                        BigInt                      @id @default(autoincrement()) @db.UnsignedBigInt
+    from_repo_id                                              BigInt?                     @db.UnsignedBigInt
+    from_agency_id                                            BigInt?                     @db.UnsignedBigInt
+    to_repo_id                                                BigInt?                     @db.UnsignedBigInt
+    to_agency_id                                              BigInt?                     @db.UnsignedBigInt
+    transaction_id                                            BigInt?                     @db.UnsignedBigInt
+    from_admin_id                                             BigInt?                     @db.UnsignedBigInt
+    to_admin_id                                               BigInt?                     @db.UnsignedBigInt
+    from_province_id                                          Int?                        @db.UnsignedSmallInt
+    from_county_id                                            Int?                        @db.UnsignedSmallInt
+    from_district_id                                          Int?                        @db.UnsignedSmallInt
+    from_postal_code                                          String?                     @db.VarChar(20)
+    from_location                                             String?                     @db.VarChar(50)
+    from_address                                              String?                     @db.VarChar(2048)
+    to_province_id                                            Int?                        @db.UnsignedSmallInt
+    to_county_id                                              Int?                        @db.UnsignedSmallInt
+    to_district_id                                            Int?                        @db.UnsignedSmallInt
+    to_postal_code                                            String?                     @db.VarChar(20)
+    to_location                                               String?                     @db.VarChar(50)
+    to_address                                                String?                     @db.VarChar(2048)
+    to_fullname                                               String?                     @db.VarChar(200)
+    to_phone                                                  String?                     @db.VarChar(20)
+    from_fullname                                             String?                     @db.VarChar(200)
+    from_phone                                                String?                     @db.VarChar(20)
+    status                                                    repository_orders_status
+    total_items                                               Int                         @default(0) @db.UnsignedInt
+    total_discount                                            BigInt                      @default(0) @db.UnsignedBigInt
+    total_price                                               BigInt                      @default(0) @db.UnsignedBigInt
+    total_items_price                                         BigInt                      @default(0) @db.UnsignedBigInt
+    total_shipping_price                                      BigInt                      @default(0) @db.UnsignedBigInt
+    created_at                                                DateTime?                   @db.Timestamp(0)
+    updated_at                                                DateTime?                   @db.Timestamp(0)
+    done_at                                                   DateTime?                   @db.Timestamp(0)
+    shipping_id                                               BigInt?                     @db.UnsignedBigInt
+    shipping_method_id                                        BigInt?                     @db.UnsignedBigInt
+    delivery_date                                             DateTime?                   @db.Date
+    delivery_timestamp                                        String?                     @db.VarChar(15)
+    pay_type                                                  repository_orders_pay_type?
+    payed_at                                                  DateTime?                   @db.Timestamp(0)
+    distance                                                  Int?                        @db.UnsignedInt
+    tax_price                                                 Int                         @default(0) @db.UnsignedInt
+    total_weight                                              Decimal                     @default(0.000) @db.Decimal(8, 3)
+    repository_order_items                                    repository_order_items[]
+    admins_repository_orders_from_admin_idToadmins            admins?                     @relation("repository_orders_from_admin_idToadmins", fields: [from_admin_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_from_admin_id_foreign")
+    agencies_repository_orders_from_agency_idToagencies       agencies?                   @relation("repository_orders_from_agency_idToagencies", fields: [from_agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_from_agency_id_foreign")
+    cities_repository_orders_from_county_idTocities           cities?                     @relation("repository_orders_from_county_idTocities", fields: [from_county_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_from_county_id_foreign")
+    cities_repository_orders_from_district_idTocities         cities?                     @relation("repository_orders_from_district_idTocities", fields: [from_district_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_from_district_id_foreign")
+    cities_repository_orders_from_province_idTocities         cities?                     @relation("repository_orders_from_province_idTocities", fields: [from_province_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_from_province_id_foreign")
+    repositories_repository_orders_from_repo_idTorepositories repositories?               @relation("repository_orders_from_repo_idTorepositories", fields: [from_repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_from_repo_id_foreign")
+    shipping_methods                                          shipping_methods?           @relation(fields: [shipping_method_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_shipping_method_id_foreign")
+    admins_repository_orders_to_admin_idToadmins              admins?                     @relation("repository_orders_to_admin_idToadmins", fields: [to_admin_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_to_admin_id_foreign")
+    agencies_repository_orders_to_agency_idToagencies         agencies?                   @relation("repository_orders_to_agency_idToagencies", fields: [to_agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_to_agency_id_foreign")
+    cities_repository_orders_to_county_idTocities             cities?                     @relation("repository_orders_to_county_idTocities", fields: [to_county_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_to_county_id_foreign")
+    cities_repository_orders_to_district_idTocities           cities?                     @relation("repository_orders_to_district_idTocities", fields: [to_district_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_to_district_id_foreign")
+    cities_repository_orders_to_province_idTocities           cities?                     @relation("repository_orders_to_province_idTocities", fields: [to_province_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_to_province_id_foreign")
+    repositories_repository_orders_to_repo_idTorepositories   repositories?               @relation("repository_orders_to_repo_idTorepositories", fields: [to_repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_to_repo_id_foreign")
+    transactions                                              transactions?               @relation(fields: [transaction_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "repository_orders_transaction_id_foreign")
+
+    @@index([from_admin_id], map: "repository_orders_from_admin_id_foreign")
+    @@index([from_agency_id], map: "repository_orders_from_agency_id_foreign")
+    @@index([from_county_id], map: "repository_orders_from_county_id_foreign")
+    @@index([from_district_id], map: "repository_orders_from_district_id_foreign")
+    @@index([from_province_id], map: "repository_orders_from_province_id_foreign")
+    @@index([from_repo_id], map: "repository_orders_from_repo_id_foreign")
+    @@index([shipping_id], map: "repository_orders_shipping_id_foreign")
+    @@index([shipping_method_id], map: "repository_orders_shipping_method_id_foreign")
+    @@index([status], map: "repository_orders_status_index")
+    @@index([to_admin_id], map: "repository_orders_to_admin_id_foreign")
+    @@index([to_agency_id], map: "repository_orders_to_agency_id_foreign")
+    @@index([to_county_id], map: "repository_orders_to_county_id_foreign")
+    @@index([to_district_id], map: "repository_orders_to_district_id_foreign")
+    @@index([to_province_id], map: "repository_orders_to_province_id_foreign")
+    @@index([to_repo_id], map: "repository_orders_to_repo_id_foreign")
+    @@index([transaction_id], map: "repository_orders_transaction_id_foreign")
+}
+
+model repository_shops {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+}
+
+model rubik {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    face_id    Int       @db.UnsignedTinyInt
+    lang       String?   @db.VarChar(2)
+    title      String?   @db.VarChar(100)
+    icon       String?   @db.VarChar(1024)
+    link       String?   @db.VarChar(1024)
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+}
+
+model samples {
+    id                                 BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+    name                               String         @db.VarChar(200)
+    status                             samples_status @default(active)
+    agency_id                          BigInt?        @db.UnsignedBigInt
+    product_id                         BigInt?        @db.UnsignedBigInt
+    variation_id                       BigInt?        @db.UnsignedBigInt
+    guarantee_months                   Int?           @db.UnsignedTinyInt
+    guarantee_expires_at               DateTime?      @db.Timestamp(0)
+    produced_at                        DateTime?      @db.Timestamp(0)
+    barcode                            String?        @db.VarChar(30)
+    admin_id                           BigInt?        @db.UnsignedBigInt
+    operator_id                        BigInt?        @db.UnsignedBigInt
+    customer_id                        BigInt?        @db.UnsignedBigInt
+    created_at                         DateTime?      @db.Timestamp(0)
+    updated_at                         DateTime?      @db.Timestamp(0)
+    repo_id                            BigInt?        @db.UnsignedBigInt
+    admins_samples_admin_idToadmins    admins?        @relation("samples_admin_idToadmins", fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_admin_id_foreign")
+    agencies                           agencies?      @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_agency_id_foreign")
+    users                              users?         @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_customer_id_foreign")
+    admins_samples_operator_idToadmins admins?        @relation("samples_operator_idToadmins", fields: [operator_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_operator_id_foreign")
+    products                           products?      @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_product_id_foreign")
+    repositories                       repositories?  @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_repo_id_foreign")
+    variations                         variations?    @relation(fields: [variation_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "samples_variation_id_foreign")
+
+    @@index([admin_id], map: "samples_admin_id_foreign")
+    @@index([agency_id], map: "samples_agency_id_foreign")
+    @@index([customer_id], map: "samples_customer_id_foreign")
+    @@index([operator_id], map: "samples_operator_id_foreign")
+    @@index([product_id], map: "samples_product_id_foreign")
+    @@index([repo_id], map: "samples_repo_id_foreign")
+    @@index([variation_id], map: "samples_variation_id_foreign")
+}
+
+model sessions {
+    id            String  @id
+    user_id       BigInt? @db.UnsignedBigInt
+    ip_address    String? @db.VarChar(45)
+    user_agent    String? @db.Text
+    payload       String  @db.LongText
+    last_activity Int
+
+    @@index([last_activity], map: "sessions_last_activity_index")
+    @@index([user_id], map: "sessions_user_id_index")
+}
+
+model settings {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    key        String    @db.VarChar(30)
+    value      String?   @db.VarChar(1024)
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+
+    @@index([key], map: "settings_key_index")
+}
+
+model shipping_methods {
+    id                                                     BigInt                    @id @default(autoincrement()) @db.UnsignedBigInt
+    repo_id                                                BigInt?                   @db.UnsignedBigInt
+    agency_id                                              BigInt?                   @db.UnsignedBigInt
+    products                                               String?                   @db.LongText
+    cities                                                 String?                   @db.LongText
+    min_order_weight                                       Int                       @default(0) @db.UnsignedInt
+    per_weight_price                                       Int                       @default(0) @db.UnsignedInt
+    per_distance_price                                     Int                       @default(0) @db.UnsignedInt
+    base_price                                             Int                       @default(0) @db.UnsignedInt
+    free_from_price                                        Int?                      @db.UnsignedInt
+    name                                                   String                    @db.VarChar(200)
+    description                                            String?                   @db.VarChar(2048)
+    status                                                 shipping_methods_status   @default(inactive)
+    pay_type                                               shipping_methods_pay_type @default(online)
+    created_at                                             DateTime?                 @db.Timestamp(0)
+    updated_at                                             DateTime?                 @db.Timestamp(0)
+    timestamps                                             String?                   @db.LongText
+    shipping_agency_id                                     BigInt?                   @db.UnsignedBigInt
+    cart_items                                             cart_items[]
+    order_items                                            order_items[]
+    orders                                                 orders[]
+    repository_cart_items                                  repository_cart_items[]
+    repository_order_items                                 repository_order_items[]
+    repository_orders                                      repository_orders[]
+    agencies_shipping_methods_agency_idToagencies          agencies?                 @relation("shipping_methods_agency_idToagencies", fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "shipping_methods_agency_id_foreign")
+    repositories                                           repositories?             @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "shipping_methods_repo_id_foreign")
+    agencies_shipping_methods_shipping_agency_idToagencies agencies?                 @relation("shipping_methods_shipping_agency_idToagencies", fields: [shipping_agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "shipping_methods_shipping_agency_id_foreign")
+
+    @@index([agency_id], map: "shipping_methods_agency_id_foreign")
+    @@index([repo_id], map: "shipping_methods_repo_id_foreign")
+    @@index([shipping_agency_id], map: "shipping_methods_shipping_agency_id_foreign")
+}
+
+model shippings {
+    id                  BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+    driver_id           BigInt?          @db.UnsignedBigInt
+    car_id              BigInt?          @db.UnsignedBigInt
+    agency_id           BigInt?          @db.UnsignedBigInt
+    status              shippings_status
+    order_delivered_qty Int              @default(0) @db.UnsignedSmallInt
+    order_qty           Int              @default(0) @db.UnsignedSmallInt
+    done_at             DateTime?        @db.Timestamp(0)
+    created_at          DateTime?        @db.Timestamp(0)
+    updated_at          DateTime?        @db.Timestamp(0)
+    orders              orders[]
+    agencies            agencies?        @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "shippings_agency_id_foreign")
+    cars                cars?            @relation(fields: [car_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "shippings_car_id_foreign")
+    drivers             drivers?         @relation(fields: [driver_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "shippings_driver_id_foreign")
+
+    @@index([agency_id], map: "shippings_agency_id_foreign")
+    @@index([car_id], map: "shippings_car_id_foreign")
+    @@index([driver_id], map: "shippings_driver_id_foreign")
+    @@index([status], map: "shippings_status_index")
+}
+
+model shops {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+}
+
+model sliders {
+    id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    title       String?   @db.VarChar(1024)
+    description String?   @db.VarChar(2048)
+    is_active   Boolean   @default(true)
+    created_at  DateTime? @db.Timestamp(0)
+    updated_at  DateTime? @db.Timestamp(0)
+}
+
+model sms_verify {
+    id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+    phone      String   @db.VarChar(20)
+    code       String   @db.VarChar(5)
+    verified   Boolean  @default(false)
+    created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model ticket_chats {
+    id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+    from_type  String
+    from_id    BigInt   @db.UnsignedBigInt
+    ticket_id  BigInt   @db.UnsignedBigInt
+    from_seen  Boolean  @default(false)
+    to_seen    Boolean  @default(false)
+    message    String   @db.Text
+    created_at DateTime @default(now()) @db.Timestamp(0)
+    users      users    @relation(fields: [from_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "ticket_chats_from_id_foreign")
+    tickets    tickets  @relation(fields: [ticket_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "ticket_chats_ticket_id_foreign")
+
+    @@index([from_id], map: "ticket_chats_from_id_foreign")
+    @@index([from_type, from_id], map: "ticket_chats_from_type_from_id_index")
+    @@index([ticket_id], map: "ticket_chats_ticket_id_foreign")
+}
+
+model tickets {
+    id           BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+    agency_id    BigInt?            @db.UnsignedBigInt
+    subject      String             @db.VarChar(100)
+    status       tickets_status
+    from_id      BigInt             @db.UnsignedBigInt
+    from_type    tickets_from_type?
+    to_id        BigInt             @db.UnsignedBigInt
+    to_type      tickets_to_type?
+    created_at   DateTime?          @db.Timestamp(0)
+    updated_at   DateTime?          @db.Timestamp(0)
+    ticket_chats ticket_chats[]
+    agencies     agencies?          @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "tickets_agency_id_foreign")
+
+    @@index([agency_id], map: "tickets_agency_id_foreign")
+    @@index([from_id], map: "tickets_from_id_index")
+    @@index([from_type], map: "tickets_from_type_index")
+    @@index([to_id], map: "tickets_to_id_index")
+    @@index([to_type], map: "tickets_to_type_index")
+}
+
+model transactions {
+    id                BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+    title             String                  @db.VarChar(100)
+    type              transactions_type?
+    for_type          transactions_for_type?
+    for_id            BigInt?                 @db.UnsignedBigInt
+    from_type         transactions_from_type?
+    from_id           BigInt?                 @db.UnsignedBigInt
+    to_type           transactions_to_type?
+    to_id             BigInt?                 @db.UnsignedBigInt
+    info              String?                 @db.VarChar(2048)
+    amount            Int                     @default(0) @db.UnsignedInt
+    pay_id            String?                 @db.VarChar(50)
+    coupon            String?                 @db.VarChar(10)
+    pay_gate          String?                 @db.VarChar(10)
+    created_at        DateTime?               @db.Timestamp(0)
+    updated_at        DateTime?               @db.Timestamp(0)
+    payed_at          DateTime?               @db.Timestamp(0)
+    orders            orders[]
+    repository_orders repository_orders[]
+
+    @@index([for_id], map: "transactions_for_id_index")
+    @@index([pay_id], map: "transactions_pay_id_index")
+    @@index([type], map: "transactions_type_index")
+}
+
+model user_financials {
+    id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+    user_id    BigInt?   @db.UnsignedBigInt
+    wallet     BigInt    @default(0)
+    card       String?   @db.VarChar(16)
+    sheba      String?   @db.VarChar(24)
+    created_at DateTime? @db.Timestamp(0)
+    updated_at DateTime? @db.Timestamp(0)
+
+    @@index([user_id], map: "user_financials_user_id_index")
+}
+
+model users {
+    id                        BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+    fullname                  String         @db.VarChar(100)
+    email                     String?        @unique(map: "users_email_unique") @db.VarChar(100)
+    email_verified_at         DateTime?      @db.Timestamp(0)
+    phone                     String?        @db.VarChar(20)
+    phone_verified            Boolean        @default(false)
+    password                  String?        @db.VarChar(200)
+    two_factor_secret         String?        @db.Text
+    two_factor_recovery_codes String?        @db.Text
+    two_factor_confirmed_at   DateTime?      @db.Timestamp(0)
+    city_id                   Int?           @db.UnsignedSmallInt
+    telegram_id               String?        @db.VarChar(50)
+    bale_id                   String?        @db.VarChar(50)
+    soroush_id                String?        @db.VarChar(50)
+    role                      users_role     @default(us)
+    is_active                 Boolean        @default(true)
+    is_block                  Boolean        @default(false)
+    status                    users_status   @default(active)
+    wallet_active             Boolean        @default(false)
+    notifications             Int            @default(0) @db.UnsignedInt
+    meta_wallet               Int            @default(0) @db.UnsignedInt
+    ref_id                    String?        @db.VarChar(10)
+    push_id                   String?        @db.VarChar(20)
+    expires_at                DateTime?      @db.Timestamp(0)
+    settings                  String?        @db.LongText
+    addresses                 String?        @db.LongText
+    access                    String?        @db.VarChar(20)
+    remember_token            String?        @db.VarChar(100)
+    created_at                DateTime?      @db.Timestamp(0)
+    updated_at                DateTime?      @db.Timestamp(0)
+    step                      Int?           @db.TinyInt
+    articles                  articles[]
+    coupons                   coupons[]
+    payments                  payments[]
+    samples                   samples[]
+    ticket_chats              ticket_chats[]
+    cities                    cities?        @relation(fields: [city_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "users_city_id_foreign")
+
+    @@index([city_id], map: "users_city_id_foreign")
+}
+
+model variations {
+    id                     BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+    name                   String                   @db.VarChar(200)
+    tags                   String?                  @db.VarChar(200)
+    status                 variations_status        @default(active)
+    product_id             BigInt?                  @db.UnsignedBigInt
+    grade                  variations_grade?
+    pack_id                Int?                     @db.UnsignedInt
+    agency_id              BigInt?                  @db.UnsignedBigInt
+    repo_id                BigInt?                  @db.UnsignedBigInt
+    category_id            Int?                     @db.UnsignedInt
+    in_repo                Decimal                  @default(0.000) @db.Decimal(8, 3)
+    in_shop                Decimal                  @default(0.000) @db.Decimal(8, 3)
+    min_allowed            Int                      @default(0) @db.UnsignedInt
+    weight                 Decimal?                 @db.Decimal(8, 3)
+    price                  Int                      @default(0) @db.UnsignedInt
+    auction_price          Int                      @default(0) @db.UnsignedInt
+    in_auction             Boolean                  @default(false)
+    agency_level           variations_agency_level?
+    unit                   variations_unit          @default(piece)
+    sell_count             BigInt                   @default(0) @db.UnsignedBigInt
+    description            String?                  @db.LongText
+    created_at             DateTime?                @db.Timestamp(0)
+    updated_at             DateTime?                @db.Timestamp(0)
+    cart_items             cart_items[]
+    order_items            order_items[]
+    repository_cart_items  repository_cart_items[]
+    repository_order_items repository_order_items[]
+    samples                samples[]
+    agencies               agencies?                @relation(fields: [agency_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "variations_agency_id_foreign")
+    categories             categories?              @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "variations_category_id_foreign")
+    packs                  packs?                   @relation(fields: [pack_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "variations_pack_id_foreign")
+    products               products?                @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "variations_product_id_foreign")
+    repositories           repositories?            @relation(fields: [repo_id], references: [id], onDelete: NoAction, onUpdate: Restrict, map: "variations_repo_id_foreign")
+
+    @@index([agency_id], map: "variations_agency_id_foreign")
+    @@index([category_id], map: "variations_category_id_foreign")
+    @@index([pack_id], map: "variations_pack_id_foreign")
+    @@index([product_id], map: "variations_product_id_foreign")
+    @@index([repo_id], map: "variations_repo_id_foreign")
+}
+
+enum admins_agency_level {
+    zero @map("0")
+    one  @map("1")
+    two  @map("2")
+}
+
+enum samples_status {
+    active
+    inactive
+}
+
+enum transactions_type {
+    pay
+    profit
+    settlement
+    charge
+    shipping
+}
+
+enum categories_status {
+    inactive
+    active
+    block
+}
+
+enum notifications_type {
+    pay
+    access_change
+    ticket_answer
+}
+
+enum tickets_status {
+    review
+    closed
+    responded
+}
+
+enum transactions_for_type {
+    order
+    repo_order @map("repo-order")
+    admin
+    user
+    agency
+    operator
+}
+
+enum variations_status {
+    active
+    inactive
+}
+
+enum shippings_status {
+    preparing
+    sending
+    done
+    canceled
+}
+
+enum agencies_level {
+    zero @map("0")
+    one  @map("1")
+    two  @map("2")
+}
+
+enum orders_status {
+    request
+    pending
+    processing
+    ready
+    sending
+    delivered
+    canceled
+    rejected
+    refunded
+}
+
+enum payments_pay_market {
+    bazaar
+    myket
+    playstore
+    bank
+}
+
+enum tickets_from_type {
+    admin
+    operator
+    user
+    agency
+}
+
+enum transactions_from_type {
+    admin
+    operator
+    user
+    agency
+}
+
+enum variations_grade {
+    one   @map("1")
+    two   @map("2")
+    three @map("3")
+}
+
+enum cities_level {
+    one   @map("1")
+    two   @map("2")
+    three @map("3")
+}
+
+enum products_status {
+    inactive
+    active
+    block
+}
+
+enum cart_items_unit {
+    piece
+    kg
+}
+
+enum notifications_owner_type {
+    admin
+    operator
+    user
+    agency
+}
+
+enum packs_status {
+    inactive
+    active
+    block
+}
+
+enum tickets_to_type {
+    admin
+    operator
+    user
+    agency
+}
+
+enum transactions_to_type {
+    admin
+    operator
+    user
+    agency
+}
+
+enum articles_status {
+    inactive
+    active
+    block
+}
+
+enum order_items_unit {
+    piece
+    kg
+}
+
+enum partnerships_type {
+    agency
+    farmer
+    gardener
+}
+
+enum admins_role {
+    god
+    owner
+    admin
+    operator
+}
+
+enum admins_status {
+    active
+    inactive
+    block
+}
+
+enum agencies_status {
+    inactive
+    active
+    block
+}
+
+enum shipping_methods_status {
+    inactive
+    active
+    block
+}
+
+enum repository_order_items_grade {
+    one   @map("1")
+    two   @map("2")
+    three @map("3")
+}
+
+enum shipping_methods_pay_type {
+    online
+    local
+}
+
+enum order_items_grade {
+    one   @map("1")
+    two   @map("2")
+    three @map("3")
+}
+
+enum repositories_status {
+    inactive
+    active
+    block
+}
+
+enum users_role {
+    us
+}
+
+enum users_status {
+    active
+    inactive
+    block
+}
+
+enum variations_agency_level {
+    zero @map("0")
+    one  @map("1")
+    two  @map("2")
+}
+
+enum variations_unit {
+    piece
+    kg
+}
+
+enum repository_orders_status {
+    request
+    pending
+    processing
+    ready
+    sending
+    delivered
+    canceled
+    rejected
+    refunded
+}
+
+enum orders_pay_type {
+    online
+    local
+}
+
+enum repository_orders_pay_type {
+    online
+    local
+}

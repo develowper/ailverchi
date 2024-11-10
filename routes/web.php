@@ -8,6 +8,7 @@ use App\Http\Controllers\BusinessController;
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ExchangeController;
 use App\Http\Controllers\HireController;
 use App\Http\Controllers\ItemController;
@@ -153,6 +154,7 @@ Route::get('storage/products')->name('storage.products');
 Route::get('storage/admins')->name('storage.admins');
 Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
+Route::get('storage/docs')->name('storage.docs');
 
 Route::get('/', [MainController::class, 'main'])->name('/');
 Route::get('view', [MainController::class, 'viewFile'])->name('view.file');
@@ -296,6 +298,7 @@ Route::get('language/{language}', function ($language) {
 Route::post('partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
 
 Route::get('/agency/{id}/{name}', [AgencyController::class, 'view'])->name('agency.view');
+Route::get('/doc/{name}', [DocumentController::class, 'view'])->name('doc.view');
 
 
 //
