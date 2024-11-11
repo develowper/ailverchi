@@ -33,7 +33,7 @@
     },
     "devDependencies": {
         "@nuxt/content": "^2.13.4",
-        "@prisma/client": "^5.22.0",
+        "@prisma/client": "^5.21.0",
         "@types/node": "^22.9.0",
         "@vitejs/plugin-legacy": "^5.4.3",
         "sass": "^1.80.6",
