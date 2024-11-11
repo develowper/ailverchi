@@ -39,9 +39,12 @@ export default defineNuxtConfig({
         // '@nuxtjs/supabase',
         '@nuxt/image-edge',
         '@prisma/nuxt',
-
+        '@pinia/nuxt',
+        '@pinia-plugin-persistedstate/nuxt',
     ],
-
+    build: {
+        transpile: ['pinia-plugin-persistedstate'],
+    },
     nitro: {
         experimental: {
             websocket: true
