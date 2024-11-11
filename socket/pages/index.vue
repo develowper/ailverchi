@@ -1,5 +1,5 @@
 <template>
-    <NuxtLayout name="scaffold">
+    <NuxtLayout name="scaffold" title="main">
         <div class="flex flex-col items-center justify-center" style="height: 100vh">
 
             <Tooltip content="list of todos">
