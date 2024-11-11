@@ -31,7 +31,9 @@ export default defineNuxtConfig({
     //         ],
     //     }
     // },
-
+    prisma: {
+        autoSetupPrisma: true
+    },
     modules: [
         '@nuxtjs/tailwindcss',
         '@pinia/nuxt',
@@ -40,7 +42,11 @@ export default defineNuxtConfig({
         '@nuxt/image-edge',
         '@prisma/nuxt',
     ],
-
+    nitro: {
+        experimental: {
+            websocket: true
+        },
+    },
     ssr: true,
 
     sanctum: {
@@ -84,7 +90,7 @@ export default defineNuxtConfig({
         },
     },
     compatibilityDate: '2024-04-03',
-    devtools: {enabled: true},
+    devtools: { enabled: true },
     content: {
         // Configuring code highlighting
         // https://content.nuxtjs.org/api/configuration

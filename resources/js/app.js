@@ -15,6 +15,7 @@ import Mixins from "@/vue-mixins";
 import LoadScript from 'vue-plugin-load-script';
 import VueDragscroll from "vue-dragscroll";
 import {Buffer} from "buffer";
+import './echo';
 
 window.Buffer = window.Buffer || Buffer;
 import './scripts';

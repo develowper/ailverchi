@@ -21,9 +21,13 @@
         "@pinia/nuxt": "^0.5.0",
         "@prisma/nuxt": "^0.0.35",
         "@vueuse/core": "^11.2.0",
+        "buffer": "^6.0.3",
         "mysql2": "^3.11.4",
         "nuxt": "^3.13.2",
         "nuxt-auth-sanctum": "^0.5.1",
+        "nuxt-socket-io": "^3.0.13",
+        "socket.io": "^4.8.1",
+        "socket.io-client": "^4.8.1",
         "tw-elements": "^1.1.0",
         "vue": "^3.5.12",
         "vue-router": "^4.4.5"

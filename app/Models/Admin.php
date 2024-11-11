@@ -25,6 +25,10 @@ class Admin extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    protected $guarded = [
+        'id'
+    ];
     protected $fillable = [
         'fullname',
         'agency_id',
