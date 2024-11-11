@@ -3,16 +3,16 @@
 
         <Head>
             <Title>{{ title }}</Title>
-            <Meta name="description" :content="description" />
-            <Meta name="og:description" :content="description" />
-            <Meta name="og:title" :content="title" />
-            <Meta name="og:image" :content="image" />
-            <Meta name="og:url" :content="url" />
-            <Meta name="og:type" content="website" />
-            <Meta name="twitter:card" content="summary_large_image" />
-            <Meta name="twitter:title" :content="title" />
-            <Meta name="twitter:description" :content="description" />
-            <Meta name="twitter:image" :content="image" />
+            <Meta name="description" :content="description"/>
+            <Meta name="og:description" :content="description"/>
+            <Meta name="og:title" :content="title"/>
+            <Meta name="og:image" :content="image"/>
+            <Meta name="og:url" :content="url"/>
+            <Meta name="og:type" content="website"/>
+            <Meta name="twitter:card" content="summary_large_image"/>
+            <Meta name="twitter:title" :content="title"/>
+            <Meta name="twitter:description" :content="description"/>
+            <Meta name="twitter:image" :content="image"/>
 
         </Head>
         <header>
@@ -32,14 +32,14 @@
             </ul>
         </header>
         <div class="mainContent">
-            <slot />
+            <slot/>
         </div>
         <footer>
             <h1>Footer</h1>
         </footer>
     </div>
 </template>
-<script lang="ts"  setup>
+<script lang="ts" setup>
 
 defineProps({
     title: String,
@@ -55,18 +55,17 @@ defineProps({
 })
 
 
-import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
-import { onMounted } from 'vue';
+import {onMounted} from 'vue';
 
-import { useAuthStore } from '~/store/auth'; // import the auth store we just created
+import {useAuthStore} from '~/store/auth'; // import the auth store we just created
 
 
 const router = useRouter();
 
 
-const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
+const {logUserOut} = useAuthStore(); // use authenticateUser action from  auth store
 
-const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+const {authenticated} = ref(useAuthStore()); // make authenticated state reactive with storeToRefs
 
 
 const logout = () => {
@@ -77,33 +76,33 @@ const logout = () => {
 
 };
 //start socket server
- let ws;
+let ws;
 const connect = async () => {
-            const isSecure = location.protocol === "https:";
-            const url = (isSecure ? "wss://" : "ws://") +  '127.0.0.1:5800' + "/_ws";
-            if (ws) {
-              console.log("ws", "Closing previous connection before reconnecting...");
-              ws.close();
-              clear();
-            }
-  
-            console.log("ws", "Connecting to", url, "...");
-            ws = new WebSocket(url);
-  
-            ws.addEventListener("message", async (event) => {
-              let data = typeof event.data === "string" ? data : await event.data.text();
-              const { user = "system", message = "" } = data.startsWith("{")
-                ? JSON.parse(data)
-                : { message: data };
-              console.log(
-                user,
-                typeof message === "string" ? message : JSON.stringify(message),
-              );
-            });
-  
-            await new Promise((resolve) => ws.addEventListener("open", resolve));
-            console.log("ws", "Connected!");
-          };
+    const isSecure = location.protocol === "https:";
+    const url = (isSecure ? "wss://" : "ws://") + '127.0.0.1:5800' + "/_ws";
+    if (ws) {
+        console.log("ws", "Closing previous connection before reconnecting...");
+        ws.close();
+        clear();
+    }
+
+    console.log("ws", "Connecting to", url, "...");
+    ws = new WebSocket(url);
+
+    ws.addEventListener("message", async (event) => {
+        let data = typeof event.data === "string" ? data : await event.data.text();
+        const {user = "system", message = ""} = data.startsWith("{")
+            ? JSON.parse(data)
+            : {message: data};
+        console.log(
+            user,
+            typeof message === "string" ? message : JSON.stringify(message),
+        );
+    });
+
+    await new Promise((resolve) => ws.addEventListener("open", resolve));
+    console.log("ws", "Connected!");
+};
 connect();
 // socket server
 
@@ -144,7 +143,7 @@ connect();
 
 //***end socket section
 
- 
+
 // export default {
 //     data() {
 //         return {
