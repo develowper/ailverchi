@@ -2,7 +2,8 @@
 // import { Server as Engine } from "engine.io";
 // import { Server } from "socket.io";
 // import { defineEventHandler } from "h3";
-defineNuxtPlugin(() => { })
+export default defineNuxtPlugin(() => {
+})
 // export default defineNitroPlugin((nitroApp: NitroApp) => {
 //     const engine = new Engine();
 //     const io = new Server();
