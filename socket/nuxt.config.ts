@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// import {nodePolyfills} from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import legacy from '@vitejs/plugin-legacy'
-
+import inject from '@rollup/plugin-inject'
 
 export default defineNuxtConfig({
 
@@ -38,10 +38,23 @@ export default defineNuxtConfig({
         // 'nuxt-auth-sanctum',
         // '@nuxtjs/supabase',
         '@nuxt/image-edge',
-        '@prisma/nuxt',
+        // '@prisma/nuxt',
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
+        'nuxt3-socket.io',
     ],
+    socket: {
+        // JSON serializable options only.
+        // options object to pass when instantiating socket server.
+        serverOptions: {
+            cors: {
+                origin: "*",
+                // methods: ["GET", "POST"],
+                // allowedHeaders: ["my-custom-header"],
+                // credentials: true
+            }
+        }
+    },
     build: {
         transpile: ['pinia-plugin-persistedstate'],
     },
@@ -93,7 +106,7 @@ export default defineNuxtConfig({
         },
     },
     compatibilityDate: '2024-04-03',
-    devtools: {enabled: true},
+    devtools: { enabled: true },
     content: {
         // Configuring code highlighting
         // https://content.nuxtjs.org/api/configuration
@@ -120,7 +133,11 @@ export default defineNuxtConfig({
         content: [
             // `~/assets/js/*.{js,ts}`,
         ],
-
+        build: {
+            rollupOptions: {
+                plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+            },
+        },
         css: {
             preprocessorOptions: {
                 scss: {
@@ -140,18 +157,19 @@ export default defineNuxtConfig({
             // legacy({
             //     targets: ['since 2015'],
             // }),
-            // nodePolyfills({
-            //     // protocolImports: true,
-            //     // include: [
-            //     //     'promises',
-            //     // ],
-            //     // exclude: [
-            //     //     'process',
-            //     // ],
-            //     // globals: {
-            //     //     process: true,
-            //     // },
-            // }),
+            nodePolyfills({
+                // protocolImports: true,
+                // include: [
+                //     'promises',
+                // ],
+                // exclude: [
+                //     'process',
+                // ],
+                globals: {
+                    process: true,
+                    buffer: true,
+                },
+            }),
         ],
 
     },
