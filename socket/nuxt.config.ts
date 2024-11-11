@@ -42,7 +42,7 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
         'nuxt3-socket.io',
-         
+
     ],
     socket: {
         // JSON serializable options only.
@@ -158,19 +158,19 @@ export default defineNuxtConfig({
             // legacy({
             //     targets: ['since 2015'],
             // }),
-            nodePolyfills({
-                // protocolImports: true,
-                // include: [
-                //     'promises',
-                // ],
-                // exclude: [
-                //     'process',
-                // ],
-                globals: {
-                    process: true,
-                    buffer: true,
-                },
-            }),
+            // nodePolyfills({
+            //     // protocolImports: true,
+            //     // include: [
+            //     //     'promises',
+            //     // ],
+            //     // exclude: [
+            //     //     'process',
+            //     // ],
+            //     globals: {
+            //         process: true,
+            //         buffer: true,
+            //     },
+            // }),
         ],
 
     },
