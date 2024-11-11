@@ -34,14 +34,17 @@ export default defineNuxtConfig({
     prisma: {
         autoSetupPrisma: true
     },
-    modules: [
-        '@nuxtjs/tailwindcss',
-        // '@pinia/nuxt',
+    modules: ['@nuxtjs/tailwindcss', ,
         // 'nuxt-auth-sanctum',
         // '@nuxtjs/supabase',
         '@nuxt/image-edge',
         '@prisma/nuxt',
+        '@pinia/nuxt',
+        '@pinia-plugin-persistedstate/nuxt',
     ],
+    build: {
+        transpile: ['pinia-plugin-persistedstate'],
+    },
     nitro: {
         experimental: {
             websocket: true
