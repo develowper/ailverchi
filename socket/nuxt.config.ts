@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import {nodePolyfills} from 'vite-plugin-node-polyfills';
 import legacy from '@vitejs/plugin-legacy'
 import inject from '@rollup/plugin-inject'
 
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     prisma: {
         autoSetupPrisma: true
     },
-    modules: ['@nuxtjs/tailwindcss', ,
+    modules: ['@nuxtjs/tailwindcss',
         // 'nuxt-auth-sanctum',
         // '@nuxtjs/supabase',
         '@nuxt/image-edge',
@@ -42,11 +42,11 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
         'nuxt3-socket.io',
+        './assets/css/style.scss',
     ],
     socket: {
         // JSON serializable options only.
         // options object to pass when instantiating socket server.
-
         serverOptions: {
             cors: {
                 origin: "*",
@@ -107,7 +107,7 @@ export default defineNuxtConfig({
         },
     },
     compatibilityDate: '2024-04-03',
-    devtools: { enabled: true },
+    devtools: {enabled: true},
     content: {
         // Configuring code highlighting
         // https://content.nuxtjs.org/api/configuration
@@ -136,7 +136,7 @@ export default defineNuxtConfig({
         ],
         build: {
             rollupOptions: {
-                plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+                plugins: [inject({Buffer: ['buffer', 'Buffer']})],
             },
         },
         css: {
