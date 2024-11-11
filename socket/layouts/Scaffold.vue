@@ -3,16 +3,16 @@
 
         <Head>
             <Title>{{ title }}</Title>
-            <Meta name="description" :content="description" />
-            <Meta name="og:description" :content="description" />
-            <Meta name="og:title" :content="title" />
-            <Meta name="og:image" :content="image" />
-            <Meta name="og:url" :content="url" />
-            <Meta name="og:type" content="website" />
-            <Meta name="twitter:card" content="summary_large_image" />
-            <Meta name="twitter:title" :content="title" />
-            <Meta name="twitter:description" :content="description" />
-            <Meta name="twitter:image" :content="image" />
+            <Meta name="description" :content="description"/>
+            <Meta name="og:description" :content="description"/>
+            <Meta name="og:title" :content="title"/>
+            <Meta name="og:image" :content="image"/>
+            <Meta name="og:url" :content="url"/>
+            <Meta name="og:type" content="website"/>
+            <Meta name="twitter:card" content="summary_large_image"/>
+            <Meta name="twitter:title" :content="title"/>
+            <Meta name="twitter:description" :content="description"/>
+            <Meta name="twitter:image" :content="image"/>
 
         </Head>
         <header>
@@ -32,7 +32,7 @@
             </ul>
         </header>
         <div class="mainContent">
-            <slot />
+            <slot/>
         </div>
         <footer>
             <h1>Footer</h1>
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import {onMounted} from 'vue';
 
 
 defineProps({
@@ -55,7 +55,6 @@ defineProps({
         default: '127.0.0.1'
     },
 })
-
 
 
 const authenticated = ref(true); // make authenticated state reactive with storeToRefs
@@ -100,9 +99,10 @@ const logout = () => {
 // socket server
 
 onMounted(() => {
-    const { $io } = useNuxtApp()
+    const {$io} = useNuxtApp()
 
-    const socket = $io('http://127.0.0.1:5800', {
+    const socket = $io('https://ailverchi.ae:5800', {
+        transports: ['websocket']
 
     });
 

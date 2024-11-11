@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     socket: {
         // JSON serializable options only.
         // options object to pass when instantiating socket server.
+
         serverOptions: {
             cors: {
                 origin: "*",

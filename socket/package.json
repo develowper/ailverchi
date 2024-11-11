@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "nuxt dev",
+        "start": "nuxt build && node ./.output/server/index.mjs",
         "start3": "nuxt build && nuxt dev",
         "start2": "nuxt build && node ./.output/server/index.mjs",
         "build": "nuxt build",
