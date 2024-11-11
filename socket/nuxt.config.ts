@@ -42,7 +42,7 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
         'nuxt3-socket.io',
-        './assets/css/style.scss',
+         
     ],
     socket: {
         // JSON serializable options only.
