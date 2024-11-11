@@ -115,7 +115,7 @@ export default defineNuxtConfig({
     },
     vite: {
         content: [
-            `~/assets/js/*.{js,ts}`,
+            // `~/assets/js/*.{js,ts}`,
         ],
 
         css: {
@@ -133,7 +133,7 @@ export default defineNuxtConfig({
             }
         },
         plugins: [
-            '@/assets/js/script.js'
+            // '@/assets/js/script.js'
             // legacy({
             //     targets: ['since 2015'],
             // }),
