@@ -40,6 +40,8 @@
     </div>
 </template>
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+
 
 defineProps({
     title: String,
@@ -55,17 +57,8 @@ defineProps({
 })
 
 
-import { onMounted } from 'vue';
 
-import { useAuthStore } from '~/store/auth'; // import the auth store we just created
-
-
-const router = useRouter();
-
-
-const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
-
-const { authenticated } = ref(useAuthStore()); // make authenticated state reactive with storeToRefs
+const authenticated = ref(true); // make authenticated state reactive with storeToRefs
 
 
 const logout = () => {
@@ -105,12 +98,28 @@ const logout = () => {
 // };
 // connect();
 // socket server
-const { $io } = useNuxtApp()
 
 onMounted(() => {
-    const socket2 = $io('127.0.0.1:5800')
-})
+    const { $io } = useNuxtApp()
 
+    const socket = $io('http://127.0.0.1:5800', {
+
+    });
+
+    socket.on("m", (data1, data2) => {
+        console.log(data1, data2)
+    });
+    socket.on("connect", () => {
+        console.log('connect', socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+    socket.on("disconnect", (e) => {
+        console.log('disconnect', e); // undefined
+    });
+    socket.on("connect_error", (e) => {
+        console.log('connect_error', e); // x8WIv7-mJelg7on_ALbx
+
+    });
+})
 //***start socket section
 
 // import { io } from 'socket.io-client';
