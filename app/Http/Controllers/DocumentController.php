@@ -16,7 +16,7 @@ class DocumentController extends Controller
         $matchingFiles = \Illuminate\Support\Facades\File::glob("{$path}/$name");
         $exists = count($matchingFiles) > 0;
         $doc = (object)[
-            'title' => !$exists ? $name : __('item_not_found'),
+            'title' => $exists ? $name : __('item_not_found'),
             'url' => $exists ? route('storage.docs') . "/$name" : null
         ];
         return Inertia::render('Document/View', [
