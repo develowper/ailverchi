@@ -1,11 +1,19 @@
 <script setup lang="ts">
-  import { Head } from '@inertiajs/vue3'
+import {Head} from '@inertiajs/vue3'
+import {io} from 'socket.io-client'
+
+const socket = io()
+socket.on('news', (data) => {
+  console.log(data)
+  socket.emit('my other event', {my: 'data'})
+})
 </script>
 
 <template>
-  <Head title="Homepage" />
+  <Head title="Homepage"/>
 
-  <div class="fixed xl:absolute left-8 right-8 top-0 bottom-0 xl:inset-0 max-w-screen-xl mx-auto before:content-[''] before:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] before:absolute before:top-0 before:left-0 before:h-full before:w-px after:content-[''] after:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] after:absolute after:top-0 after:right-0 after:h-full after:w-px"></div>
+  <div
+    class="fixed xl:absolute left-8 right-8 top-0 bottom-0 xl:inset-0 max-w-screen-xl mx-auto before:content-[''] before:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] before:absolute before:top-0 before:left-0 before:h-full before:w-px after:content-[''] after:[background:repeating-linear-gradient(0deg,var(--sand-5)_0_4px,transparent_0_8px)] after:absolute after:top-0 after:right-0 after:h-full after:w-px"></div>
 
   <div class="pt-4 h-full flex flex-col">
     <!-- Header -->
@@ -22,22 +30,25 @@
     </div>
 
     <!-- Bento with documentation, Adocasts, packages and Discord -->
-    <div class="isolate mt-10 max-w-screen-xl mx-auto px-16 xl:px-8 grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-3 gap-8">
-      <article class="row-span-3 relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-col gap-8">
+    <div
+      class="isolate mt-10 max-w-screen-xl mx-auto px-16 xl:px-8 grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-3 gap-8">
+      <article
+        class="row-span-3 relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-col gap-8">
         <div class="relative opacity-80">
           <svg fill="none" viewBox="0 0 240 105">
-            <path fill="#F9F9F8" d="M0 4a4 4 0 0 1 4-4h232a4 4 0 0 1 4 4v101H0V4Z" />
+            <path fill="#F9F9F8" d="M0 4a4 4 0 0 1 4-4h232a4 4 0 0 1 4 4v101H0V4Z"/>
             <g fill="#000" fill-rule="evenodd" clip-path="url(#a)" clip-rule="evenodd">
-              <path d="M24 11.444c0 4.391 1.053 5.445 5.444 5.445s5.445-1.054 5.445-5.445c0-4.39-1.054-5.444-5.445-5.444C25.054 6 24 7.053 24 11.444Zm2.195 1.131 1.708-3.88c.288-.655.843-1.01 1.541-1.01.699 0 1.253.355 1.542 1.01l1.707 3.88c.078.189.144.433.144.644 0 .964-.676 1.64-1.64 1.64-.33 0-.59-.083-.854-.168-.271-.087-.545-.175-.899-.175-.35 0-.63.089-.906.176-.267.085-.53.168-.846.168-.964 0-1.64-.677-1.64-1.641 0-.211.066-.455.143-.644Zm3.25-3.204-1.686 3.814c.499-.233 1.075-.344 1.685-.344.588 0 1.187.111 1.664.344l-1.664-3.814Zm26.473-.678c-.378 0-.65.268-.65.64 0 .374.272.641.65.641s.651-.267.651-.64-.273-.64-.65-.64Zm-11.907 5.502c-1.009 0-1.738-.745-1.738-1.91 0-1.187.73-1.933 1.737-1.933.468 0 .814.158 1.019.468V8.86h1.05v5.25h-1.05v-.372c-.2.304-.546.456-1.019.456Zm-.667-1.91c0-.652.352-1.077.887-1.077.54 0 .887.42.887 1.071 0 .64-.346 1.056-.887 1.056-.535 0-.887-.415-.887-1.05Zm4.384-.011c0-.646.351-1.06.877-1.06.53 0 .882.414.882 1.06 0 .646-.352 1.06-.883 1.06-.525 0-.876-.414-.876-1.06Zm11.571.835c0 .194-.147.31-.52.31-.42 0-.682-.221-.682-.489h-1.05c.026.725.714 1.265 1.711 1.265.946 0 1.55-.42 1.55-1.165 0-.557-.358-.945-1.066-1.087l-.762-.152c-.23-.047-.367-.163-.367-.315 0-.226.23-.347.525-.347.42 0 .583.195.583.426h.997c-.026-.683-.562-1.203-1.56-1.203-.929 0-1.559.468-1.559 1.176 0 .64.415.93 1.035 1.06l.756.164c.247.052.41.157.41.357Zm-2.85 1.002h-1.05v-3.675h1.05v3.675Zm-4.264-3.675v.384c.268-.31.625-.468 1.066-.468.824 0 1.36.536 1.36 1.365v2.394h-1.05v-2.173c0-.446-.252-.714-.688-.714-.436 0-.688.268-.688.714v2.173h-1.05v-3.675h1.05Zm-3.58-.084c-1.119 0-1.948.809-1.948 1.922s.83 1.921 1.948 1.921c1.123 0 1.953-.808 1.953-1.921s-.83-1.922-1.953-1.922Zm-8.758.856c-.535 0-.887.425-.887 1.076 0 .636.352 1.05.887 1.05.54 0 .887-.414.887-1.055 0-.65-.346-1.07-.887-1.07Zm-1.958 1.076c0 1.166.73 1.911 1.732 1.911.478 0 .82-.152 1.024-.456v.372h1.05v-3.675h-1.05v.384c-.21-.31-.556-.468-1.024-.468-1.003 0-1.732.746-1.732 1.932Z" />
+              <path
+                d="M24 11.444c0 4.391 1.053 5.445 5.444 5.445s5.445-1.054 5.445-5.445c0-4.39-1.054-5.444-5.445-5.444C25.054 6 24 7.053 24 11.444Zm2.195 1.131 1.708-3.88c.288-.655.843-1.01 1.541-1.01.699 0 1.253.355 1.542 1.01l1.707 3.88c.078.189.144.433.144.644 0 .964-.676 1.64-1.64 1.64-.33 0-.59-.083-.854-.168-.271-.087-.545-.175-.899-.175-.35 0-.63.089-.906.176-.267.085-.53.168-.846.168-.964 0-1.64-.677-1.64-1.641 0-.211.066-.455.143-.644Zm3.25-3.204-1.686 3.814c.499-.233 1.075-.344 1.685-.344.588 0 1.187.111 1.664.344l-1.664-3.814Zm26.473-.678c-.378 0-.65.268-.65.64 0 .374.272.641.65.641s.651-.267.651-.64-.273-.64-.65-.64Zm-11.907 5.502c-1.009 0-1.738-.745-1.738-1.91 0-1.187.73-1.933 1.737-1.933.468 0 .814.158 1.019.468V8.86h1.05v5.25h-1.05v-.372c-.2.304-.546.456-1.019.456Zm-.667-1.91c0-.652.352-1.077.887-1.077.54 0 .887.42.887 1.071 0 .64-.346 1.056-.887 1.056-.535 0-.887-.415-.887-1.05Zm4.384-.011c0-.646.351-1.06.877-1.06.53 0 .882.414.882 1.06 0 .646-.352 1.06-.883 1.06-.525 0-.876-.414-.876-1.06Zm11.571.835c0 .194-.147.31-.52.31-.42 0-.682-.221-.682-.489h-1.05c.026.725.714 1.265 1.711 1.265.946 0 1.55-.42 1.55-1.165 0-.557-.358-.945-1.066-1.087l-.762-.152c-.23-.047-.367-.163-.367-.315 0-.226.23-.347.525-.347.42 0 .583.195.583.426h.997c-.026-.683-.562-1.203-1.56-1.203-.929 0-1.559.468-1.559 1.176 0 .64.415.93 1.035 1.06l.756.164c.247.052.41.157.41.357Zm-2.85 1.002h-1.05v-3.675h1.05v3.675Zm-4.264-3.675v.384c.268-.31.625-.468 1.066-.468.824 0 1.36.536 1.36 1.365v2.394h-1.05v-2.173c0-.446-.252-.714-.688-.714-.436 0-.688.268-.688.714v2.173h-1.05v-3.675h1.05Zm-3.58-.084c-1.119 0-1.948.809-1.948 1.922s.83 1.921 1.948 1.921c1.123 0 1.953-.808 1.953-1.921s-.83-1.922-1.953-1.922Zm-8.758.856c-.535 0-.887.425-.887 1.076 0 .636.352 1.05.887 1.05.54 0 .887-.414.887-1.055 0-.65-.346-1.07-.887-1.07Zm-1.958 1.076c0 1.166.73 1.911 1.732 1.911.478 0 .82-.152 1.024-.456v.372h1.05v-3.675h-1.05v.384c-.21-.31-.556-.468-1.024-.468-1.003 0-1.732.746-1.732 1.932Z"/>
             </g>
-            <rect width="8" height="3" x="162" y="9.944" fill="#DAD9D6" rx="1" />
-            <rect width="14" height="3" x="174" y="9.944" fill="#DAD9D6" rx="1" />
-            <rect width="10" height="3" x="192" y="9.944" fill="#DAD9D6" rx="1" />
-            <rect width="10" height="3" x="206" y="9.944" fill="#DAD9D6" rx="1" />
-            <rect width="81" height="6" x="24" y="32" fill="#DAD9D6" rx="2" />
-            <rect width="95" height="6" x="24" y="44" fill="#DAD9D6" rx="2" />
-            <rect width="16" height="5" x="24" y="60" fill="#21201C" rx="1" />
-            <path fill="#DAD9D6" d="M24 85a4 4 0 0 1 4-4h184a4 4 0 0 1 4 4v20H24V85Z" />
+            <rect width="8" height="3" x="162" y="9.944" fill="#DAD9D6" rx="1"/>
+            <rect width="14" height="3" x="174" y="9.944" fill="#DAD9D6" rx="1"/>
+            <rect width="10" height="3" x="192" y="9.944" fill="#DAD9D6" rx="1"/>
+            <rect width="10" height="3" x="206" y="9.944" fill="#DAD9D6" rx="1"/>
+            <rect width="81" height="6" x="24" y="32" fill="#DAD9D6" rx="2"/>
+            <rect width="95" height="6" x="24" y="44" fill="#DAD9D6" rx="2"/>
+            <rect width="16" height="5" x="24" y="60" fill="#21201C" rx="1"/>
+            <path fill="#DAD9D6" d="M24 85a4 4 0 0 1 4-4h184a4 4 0 0 1 4 4v20H24V85Z"/>
             <path
               fill="url(#b)"
               fill-opacity=".2"
@@ -52,11 +63,11 @@
                 y2="105"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-opacity="0" />
-                <stop offset="1" stop-color="#82827C" />
+                <stop stop-opacity="0"/>
+                <stop offset="1" stop-color="#82827C"/>
               </linearGradient>
               <clipPath id="a">
-                <path fill="#fff" d="M24 6h36.307v10.889H24z" />
+                <path fill="#fff" d="M24 6h36.307v10.889H24z"/>
               </clipPath>
             </defs>
           </svg>
@@ -92,7 +103,8 @@
         </div>
       </article>
 
-      <article class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4">
+      <article
+        class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4">
         <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
           <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
             <path
@@ -117,7 +129,8 @@
         </div>
       </article>
 
-      <article class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4">
+      <article
+        class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4">
         <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
           <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
             <path
@@ -142,7 +155,8 @@
         </div>
       </article>
 
-      <article class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4">
+      <article
+        class="relative p-6 shadow-sm hover:shadow border border-sand-7 hover:border-sand-8 rounded-2xl transition ease-in-out duration-700 group flex flex-row gap-4">
         <div class="shrink-0 w-10 h-10 bg-primary/20 rounded-md flex justify-center items-center">
           <svg class="h-6 w-6 fill-primary" viewBox="0 0 256 256">
             <path
@@ -171,7 +185,8 @@
     <!-- Features -->
     <div class="grow mt-10 mb-8 px-16 xl:px-8 max-w-screen-xl mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <article class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
+        <article
+          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
           <h2 class="font-semibold text-sand-12">
             <a href="https://lucid.adonisjs.com" target="_blank" class="flex flex-row gap-2">
               <span class="bg-[#D5EAE7] h-6 w-6 flex justify-center items-center rounded">
@@ -183,9 +198,9 @@
                     stroke-linejoin="round"
                     stroke-width="2"
                   >
-                    <path d="M4 6a8 3 0 1 0 16 0A8 3 0 1 0 4 6" />
-                    <path d="M4 6v6a8 3 0 0 0 16 0V6" />
-                    <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
+                    <path d="M4 6a8 3 0 1 0 16 0A8 3 0 1 0 4 6"/>
+                    <path d="M4 6v6a8 3 0 0 0 16 0V6"/>
+                    <path d="M4 12v6a8 3 0 0 0 16 0v-6"/>
                   </g>
                 </svg>
               </span>
@@ -214,7 +229,8 @@
           </svg>
         </article>
 
-        <article class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
+        <article
+          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
           <h2 class="font-semibold text-sand-12">
             <a href="https://vinejs.dev/" target="_blank" class="flex flex-row gap-2">
               <span class="bg-[#F3DBFC] h-6 w-6 flex justify-center items-center rounded">
@@ -254,7 +270,8 @@
           </svg>
         </article>
 
-        <article class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
+        <article
+          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
           <h2 class="font-semibold text-sand-12">
             <a href="https://inertiajs.com/" target="_blank" class="flex flex-row gap-2">
               <span class="bg-[#B8EAE0] h-6 w-6 flex justify-center items-center rounded">
@@ -294,7 +311,8 @@
           </svg>
         </article>
 
-        <article class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
+        <article
+          class="relative py-4 px-5 bg-white border border-transparent rounded-lg hover:border-sand-8 hover:shadow-sm transition duration-100 ease-in-out group">
           <h2 class="font-semibold text-sand-12">
             <a href="https://japa.dev" target="_blank" class="flex flex-row gap-2">
               <span class="bg-[#FACDDC] h-6 w-6 flex justify-center items-center rounded">
@@ -332,7 +350,8 @@
       </div>
     </div>
 
-    <div class="text-sm text-center [&>code]:font-medium [&>code]:text-[#a599ff] bg-sand-12 text-sand-1 fixed bottom-0 left-0 right-0 py-2">
+    <div
+      class="text-sm text-center [&>code]:font-medium [&>code]:text-[#a599ff] bg-sand-12 text-sand-1 fixed bottom-0 left-0 right-0 py-2">
       Route for this page is registered in <code>start/routes.ts</code> file, rendering
       <code>inertia/pages/home.vue</code> template
     </div>
