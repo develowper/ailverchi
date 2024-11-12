@@ -18,7 +18,9 @@ export default defineConfig({
    */
   server: {
     hmr: {
-      clientPort: 9204
+      clientPort: 9204,
+      host: "localhost",
+      protocol: "ws",
     }
   },
   resolve: {
