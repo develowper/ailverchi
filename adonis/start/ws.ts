@@ -13,6 +13,7 @@ app.ready(() => {
     socket.on('my other event', (data) => {
       console.log(data)
     })
+    console.log('User Connected', socket.id)
   })
 })
 
