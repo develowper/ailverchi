@@ -19,7 +19,7 @@ export default defineConfig({
   server: {
     hmr: {
       clientPort: 9204,
-      host: "adonis.ailverchi.ae",
+      host: "adonis.ailverchi.ae/.socket.io",
       protocol: "ws",
     }
   },
