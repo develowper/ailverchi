@@ -3,16 +3,16 @@
 
         <Head>
             <Title>{{ title }}</Title>
-            <Meta name="description" :content="description"/>
-            <Meta name="og:description" :content="description"/>
-            <Meta name="og:title" :content="title"/>
-            <Meta name="og:image" :content="image"/>
-            <Meta name="og:url" :content="url"/>
-            <Meta name="og:type" content="website"/>
-            <Meta name="twitter:card" content="summary_large_image"/>
-            <Meta name="twitter:title" :content="title"/>
-            <Meta name="twitter:description" :content="description"/>
-            <Meta name="twitter:image" :content="image"/>
+            <Meta name="description" :content="description" />
+            <Meta name="og:description" :content="description" />
+            <Meta name="og:title" :content="title" />
+            <Meta name="og:image" :content="image" />
+            <Meta name="og:url" :content="url" />
+            <Meta name="og:type" content="website" />
+            <Meta name="twitter:card" content="summary_large_image" />
+            <Meta name="twitter:title" :content="title" />
+            <Meta name="twitter:description" :content="description" />
+            <Meta name="twitter:image" :content="image" />
 
         </Head>
         <header>
@@ -32,7 +32,7 @@
             </ul>
         </header>
         <div class="mainContent">
-            <slot/>
+            <slot />
         </div>
         <footer>
             <h1>Footer</h1>
@@ -40,7 +40,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {onMounted} from 'vue';
+import { onMounted } from 'vue';
+import { io } from "socket.io-client";
 
 
 defineProps({
@@ -97,26 +98,29 @@ const logout = () => {
 // };
 // connect();
 // socket server
-
+let socket;
 onMounted(() => {
-    const {$io} = useNuxtApp()
 
-    const socket = $io('https://ailverchi.ae:5800', {
-        transports: ['websocket']
+    const serverUrl = 'http://localhost:5800';
+    socket = io(serverUrl);
+    // const {$io} = useNuxtApp()
 
-    });
+    // const socket = $io('127.0.0.1:5800', {
+    //     // transports: ['websocket']
+
+    // });
 
     socket.on("m", (data1, data2) => {
         console.log(data1, data2)
     });
     socket.on("connect", () => {
-        console.log('connect', socket.id); // x8WIv7-mJelg7on_ALbx
+        console.log('connect', socket.id);
     });
     socket.on("disconnect", (e) => {
-        console.log('disconnect', e); // undefined
+        console.log('disconnect', e);
     });
     socket.on("connect_error", (e) => {
-        console.log('connect_error', e); // x8WIv7-mJelg7on_ALbx
+        console.log('connect_error', e.messae);
 
     });
 })

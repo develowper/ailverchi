@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "nuxt build && node ./.output/server/index.mjs",
+        "start": "nuxt build && node .output/server/index.mjs",
         "start3": "nuxt build && nuxt dev",
         "start2": "nuxt build && node ./.output/server/index.mjs",
         "build": "nuxt build",
@@ -24,7 +24,7 @@
         "@vueuse/core": "^11.2.0",
         "buffer": "^6.0.3",
         "mysql2": "^3.11.4",
-        "nuxt": "^3.13.2",
+        "nuxt": "^3.14.159",
         "nuxt-auth-sanctum": "^0.5.1",
         "nuxt-socket-io": "^3.0.13",
         "nuxt3-socket.io": "^0.3.1",

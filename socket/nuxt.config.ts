@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {nodePolyfills} from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import legacy from '@vitejs/plugin-legacy'
 import inject from '@rollup/plugin-inject'
-
+import path from 'path';
 export default defineNuxtConfig({
 
     css: ['@/assets/css/style.css'],
@@ -41,7 +41,7 @@ export default defineNuxtConfig({
         // '@prisma/nuxt',
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
-        'nuxt3-socket.io',
+        // 'nuxt3-socket.io',
 
     ],
     socket: {
@@ -63,6 +63,9 @@ export default defineNuxtConfig({
         experimental: {
             websocket: true
         },
+        // output: {
+        //     publicDir: path.join(__dirname, 'output')
+        // }
     },
     ssr: true,
 
@@ -107,7 +110,7 @@ export default defineNuxtConfig({
         },
     },
     compatibilityDate: '2024-04-03',
-    devtools: {enabled: true},
+    devtools: { enabled: true },
     content: {
         // Configuring code highlighting
         // https://content.nuxtjs.org/api/configuration
@@ -136,7 +139,7 @@ export default defineNuxtConfig({
         ],
         build: {
             rollupOptions: {
-                plugins: [inject({Buffer: ['buffer', 'Buffer']})],
+                plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
             },
         },
         css: {

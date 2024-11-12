@@ -4,10 +4,10 @@
 
             <Tooltip content="list of todos">
                 <h1>Todos: </h1>
-                <TodoList/>
+                <TodoList />
             </Tooltip>
             <div>
-                <TodoForm/>
+                <TodoForm />
 
             </div>
             <div class="flex flex-col    items-stretch">
@@ -22,10 +22,10 @@
 <script lang="ts" setup>
 
 
-import {useSupabaseClient} from "../.nuxt/imports";
+import { useSupabaseClient } from "../.nuxt/imports";
 
 const clientConfig = useRuntimeConfig();
-const {todoList: todos} = useTodo()
+const { todoList: todos } = useTodo()
 definePageMeta({
     sanctum: {
         excluded: true,
@@ -46,17 +46,17 @@ const {
     },
     method: "post",
     // baseURL: clientConfig.public.baseURL,
-    query: {page: page},
+    query: { page: page },
     body: {
         size: 3,
         page: page.value
     },
     immediate: false,
     watch: false,
-    onResponse({request, response, options}) {
+    onResponse({ request, response, options }) {
         console.log(response)
     },
-    onResponseError({request, response, options}) {
+    onResponseError({ request, response, options }) {
         console.log(response)
     }
 })
@@ -70,7 +70,7 @@ const {
 // const {data: images} = await useAsyncData('images', async () => sClient.from('images').select('*').order('created_at'))
 // console.log(images.value);
 
-import type {UserModel} from "~~/server/model/blog";
+import type { UserModel } from "~~/server/model/blog";
 
 
 const users = ref<UserModel[]>([]);
@@ -88,6 +88,6 @@ const getUser = async () => {
     }
 }
 onMounted(() => {
-    getUser();
+    // getUser();
 });
 </script>
