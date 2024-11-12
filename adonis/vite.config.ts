@@ -19,7 +19,7 @@ export default defineConfig({
   server: {
     hmr: {
       clientPort: 9204,
-      host: "localhost",
+      host: "adonis.ailverchi.ae",
       protocol: "ws",
     }
   },
