@@ -23,7 +23,7 @@ export default defineConfig({
     //   host: "localhost",
     //   protocol: "wss",
     // }
-    hmr: false,
+    // hmr: false,
   },
   resolve: {
     alias: {
