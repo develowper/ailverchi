@@ -17,11 +17,13 @@ export default defineConfig({
    * your frontend code
    */
   server: {
-    hmr: {
-      clientPort: 9204,
-      host: "0.0.0.0",
-      protocol: "wss",
-    }
+    // hmr: {
+    //
+    //   clientPort: 9204,
+    //   host: "localhost",
+    //   protocol: "wss",
+    // }
+    hmr: false,
   },
   resolve: {
     alias: {
