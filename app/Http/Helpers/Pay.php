@@ -108,7 +108,7 @@ class Pay
                     break;
             }
         } catch (\Exception $e) {
-            return ['status' => 'danger', 'message' => 'مشکلی در دریافت لینک پرداخت پیش آمد'];
+            return ['status' => 'danger', 'message' => __('problem_get_pay_link')];
         }
 
     }

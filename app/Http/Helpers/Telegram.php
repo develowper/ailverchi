@@ -3,6 +3,7 @@
 namespace App\Http\Helpers;
 
 
+use App\Events\SendToTelegram;
 use App\Models\Admin;
 use App\Models\Agency;
 use App\Models\Category;
@@ -469,6 +470,12 @@ class Telegram
     }
 
     static function log($to, $type, $data)
+    {
+        SendToTelegram::dispatch($to, $type, $data);
+
+    }
+
+    static function sendLog($to, $type, $data)
     {
 
         try {
